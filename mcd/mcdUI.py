@@ -15,6 +15,19 @@ import dlgAddMcd, mcdCloze
 
 SHORTCUTKEY = "F9" # seems this does not conflict at all with the builtin cloze shortcut
 
+helptext = '''<p><big><b>Generating MCD cards</b></big></p>
+
+<p>First, past the text that contains the information that you want to learn in the "Phrase / Passage" box.</p>
+
+<p>Next put any notes, definitions, source or other useful information about the passage in the "Notes" box.</p>
+
+<p>Finally add the words or characters that you want clozed and seperate each entry with a space.</p>
+
+<p>If you want tags added to your cards be sure and add that in the tags field.</p>
+
+<p>To generate the cards press the Add button.  When the cards are done being added a small status line will display the results.</p>
+'''
+
 def menuAddMcd():
     if mw.deck is None:
         ui.utils.showInfo('No deck open.')
@@ -42,12 +55,14 @@ class AddDialog(dlgAddMcd.Ui_Dialog):
         self.modelcombobox.addItems(models)
         if modelidx is not None:
             self.modelcombobox.setCurrentIndex(modelidx)
-#        self.tagslineedit.setDeck(mw.deck)
-#        self.tagslineedit.setText(tags)
-#        self.configbutton.setIcon(QtGui.QIcon(':/icons/configure.png'))
-#
-#        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL("helpRequested()"), gethelp)
+        self.tagslineedit.setDeck(mw.deck)
+        self.configbutton.setIcon(QtGui.QIcon(':/icons/configure.png'))
+
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL("helpRequested()"), self.help)
         QtCore.QObject.connect(self.addButton, QtCore.SIGNAL('clicked()'), self.addMcd)
+    def help(self):
+        # show help text
+        ui.utils.showText(helptext, None, type='html')	
     def addMcd(self):
         # begin busy cursor
         mw.app.setOverrideCursor(QCursor(Qt.WaitCursor))
