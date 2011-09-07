@@ -58,6 +58,8 @@ class AddDialog(dlgAddMcd.Ui_Dialog):
         self.modelcombobox.addItems(models)
         if modelidx is not None:
             self.modelcombobox.setCurrentIndex(modelidx)
+        # disable the model combo until we have better support
+        self.modelcombobox.setEnabled(False)
         self.tagslineedit.setDeck(mw.deck)
         self.configbutton.setIcon(QtGui.QIcon(':/icons/configure.png'))
 
