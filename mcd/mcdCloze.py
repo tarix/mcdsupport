@@ -48,6 +48,7 @@ def createCards(model, selection, clozes, notes, tags):
     # flush and rebuild the deck so we can use the new facts
     mw.deck.s.flush()
     mw.deck.rebuildCSS()
+    mw.deck.save()
     mw.reset()
 	# grab part of the card for the status update
     excerpt = uniSelection[:10]
