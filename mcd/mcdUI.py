@@ -15,7 +15,10 @@ import dlgAddMcd, mcdCloze
 
 SHORTCUTKEY = "F9" # seems this does not conflict at all with the builtin cloze shortcut
 
-helptext = '''<p><big><b>Generating MCD cards</b></big></p>
+helptext = '''
+<p>MCD Support for Anki v0.1.1</p>
+
+<p><big><b>Generating MCD cards</b></big></p>
 
 <p>First, past the text that contains the information that you want to learn in the "Phrase / Passage" box.</p>
 
