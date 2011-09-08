@@ -30,10 +30,11 @@ def createCards(model, selection, clozes, notes, tags):
             continue
         # create a new fact
         fact = mw.deck.newFact(model)
-		# add the raw expression for the reading generation
-        fact.fields[2].value = expression
+        # Japanese reading generation (newline hack from the Japanese support plugin)
+        fact.fields[2].value = unicode.replace( expression, u'\n', u'---newline---' )
         fact.focusLost(fact.fields[2])
-		# add the rest of the fields
+        fact.fields[2].value = unicode.replace( fact.fields[2].value, u'---newline---', u'<br>' )
+        # add the rest of the fields
         fact.fields[0].value = unicode.replace( question, u'\n', u'<br>' )
         fact.fields[1].value = unicode.replace( answer, u'\n', u'<br>' )
         fact.fields[2].value = unicode.replace( expression, u'\n', u'<br>' )
