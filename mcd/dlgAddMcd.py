@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mcd\dlgAddMcd.ui'
 #
-# Created: Wed Sep 07 02:06:50 2011
+# Created: Thu Sep 08 18:15:28 2011
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -18,7 +18,7 @@ class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName(_fromUtf8("Dialog"))
         Dialog.resize(640, 480)
-        Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "New cloze cards", None, QtGui.QApplication.UnicodeUTF8))
+        Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "Add MCD Cards", None, QtGui.QApplication.UnicodeUTF8))
         self.verticalLayout_3 = QtGui.QVBoxLayout(Dialog)
         self.verticalLayout_3.setObjectName(_fromUtf8("verticalLayout_3"))
         self.verticalLayout = QtGui.QVBoxLayout()

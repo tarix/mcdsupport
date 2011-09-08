@@ -12,7 +12,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>New cloze cards</string>
+   <string>Add MCD Cards</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
