@@ -1,6 +1,15 @@
 # -*- coding: utf-8 -*-
-# Copyright: 
-# License: GNU GPL, version 3 or later; http://www.gnu.org/copyleft/gpl.html
+#
+# This is free and unencumbered software released into the public domain.
+#
+# Portions of this code are derived from the copyrighted works of:
+#    Damien Elmes <anki@ichi2.net>
+#    Adam Mesha <adam@mesha.org>
+#   
+# All rights of the original authors are reserved pursuiant to the following license:
+#    GNU GPL, version 3 or later; http://www.gnu.org/copyleft/gpl.html
+#
+# This free project is hosted by GitHub: https://github.com/tarix/mcdsupport
 
 from anki import utils
 from ankiqt import mw
