@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mcd\dlgAddMcd.ui'
 #
-# Created: Thu Sep 08 18:15:28 2011
+# Created: Sun Oct 09 14:28:16 2011
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -124,7 +124,6 @@ class Ui_Dialog(object):
         self.horizontalLayout_2 = QtGui.QHBoxLayout()
         self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
         self.configbutton = QtGui.QPushButton(Dialog)
-        self.configbutton.setEnabled(False)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)

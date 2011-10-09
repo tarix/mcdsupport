@@ -18,11 +18,11 @@ from anki import utils
 from ankiqt import mw, ui
 from anki.errors import FactInvalidError
 
-import dlgAddMcd, mcdCloze
+import dlgAddMcd, dlgConfigure, mcdCloze
 
 SHORTCUTKEY = "F9" # seems this does not conflict at all with the builtin cloze shortcut
 
-helptext = '''
+helpAddMcd = '''
 <p>MCD Support for Anki v0.1.3</p>
 
 <p><big><b>Generating MCD cards</b></big></p>
@@ -36,6 +36,13 @@ helptext = '''
 <p>If you want tags added to your cards be sure and add that in the tags field.</p>
 
 <p>To generate the cards press the Add button.  When the cards are done being added a small status line will display the results.</p>
+'''
+
+helpConfigure = '''
+<p>MCD Support Configuration</p>
+
+<p><big>Not yet written</big><p>
+
 '''
 
 def menuAddMcd():
@@ -72,9 +79,10 @@ class AddDialog(dlgAddMcd.Ui_Dialog):
 
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL("helpRequested()"), self.help)
         QtCore.QObject.connect(self.addButton, QtCore.SIGNAL('clicked()'), self.addMcd)
+        QtCore.QObject.connect(self.configbutton, QtCore.SIGNAL('clicked()'), self.configure)
     def help(self):
         # show help text
-        ui.utils.showText(helptext, None, type='html')	
+        ui.utils.showText(helpAddMcd, None, type='html')	
     def addMcd(self):
         # begin busy cursor
         mw.app.setOverrideCursor(QCursor(Qt.WaitCursor))
@@ -93,6 +101,42 @@ class AddDialog(dlgAddMcd.Ui_Dialog):
 		# end busy cursor
         self.addButton.setEnabled(True)
         mw.app.restoreOverrideCursor()
+    def configure(self):
+        d = QtGui.QDialog(mw)
+        form = Configure()
+        form.setupUi(d)
+        ret = d.exec_()
+        if not ret:
+            return
+
+class Configure(dlgConfigure.Ui_Dialog):
+    def setupUi(self, Dialog):
+        dlgConfigure.Ui_Dialog.setupUi(self, Dialog)
+        # TODO: set up configuration dialog
+
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL("helpRequested()"), self.help)
+        #QtCore.QObject.connect(self.configbutton, QtCore.SIGNAL('clicked()'), self.addMcd)
+    def help(self):
+        # show help text
+        ui.utils.showText(helpConfigure, None, type='html')	
+    #def addMcd(self):
+    #    # begin busy cursor
+    #    mw.app.setOverrideCursor(QCursor(Qt.WaitCursor))
+    #    self.addButton.setEnabled(False)
+    #    mw.app.processEvents()
+    #    # get all user input
+    #    model = mw.deck.models[self.modelcombobox.currentIndex()]
+    #    selectionText = self.selectionEdit.toPlainText()
+    #    notesText = self.notesEdit.toPlainText()
+    #    clozesText =  self.clozesEdit.text()
+    #    tagsText = self.tagslineedit.text()
+	#	 # create cards
+    #     status = mcdCloze.createCards(model, selectionText, clozesText, notesText, tagsText)
+    #    # update the results
+    #    self.statusLabel.setText(status)
+    #    # end busy cursor
+    #    self.addButton.setEnabled(True)
+    #    mw.app.restoreOverrideCursor()
 
 def createMenu():
 	mw.mainWin.addMcd = QtGui.QAction('Add MCD Cards', mw)
