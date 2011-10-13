@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mcd\dlgConfigure.ui'
 #
-# Created: Sun Oct 09 14:28:16 2011
+# Created: Thu Oct 13 16:51:49 2011
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!

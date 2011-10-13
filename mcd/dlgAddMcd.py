@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mcd\dlgAddMcd.ui'
 #
-# Created: Sun Oct 09 14:28:16 2011
+# Created: Thu Oct 13 16:51:49 2011
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -50,7 +50,6 @@ class Ui_Dialog(object):
         self.notesEdit.setTabChangesFocus(True)
         self.notesEdit.setObjectName(_fromUtf8("notesEdit"))
         self.verticalLayout_2.addWidget(self.notesEdit)
-        self.verticalLayout_2.setStretch(1, 6)
         self.verticalLayout_2.setStretch(3, 4)
         self.verticalLayout.addLayout(self.verticalLayout_2)
         self.horizontalLayout_3 = QtGui.QHBoxLayout()
@@ -99,17 +98,31 @@ class Ui_Dialog(object):
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.horizontalLayout_4 = QtGui.QHBoxLayout()
         self.horizontalLayout_4.setObjectName(_fromUtf8("horizontalLayout_4"))
-        self.tagslabel = QtGui.QLabel(Dialog)
+        self.lblMode = QtGui.QLabel(Dialog)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.tagslabel.sizePolicy().hasHeightForWidth())
-        self.tagslabel.setSizePolicy(sizePolicy)
-        self.tagslabel.setMaximumSize(QtCore.QSize(50, 16777215))
-        self.tagslabel.setText(QtGui.QApplication.translate("Dialog", "Model", None, QtGui.QApplication.UnicodeUTF8))
-        self.tagslabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.tagslabel.setObjectName(_fromUtf8("tagslabel"))
-        self.horizontalLayout_4.addWidget(self.tagslabel)
+        sizePolicy.setHeightForWidth(self.lblMode.sizePolicy().hasHeightForWidth())
+        self.lblMode.setSizePolicy(sizePolicy)
+        self.lblMode.setMaximumSize(QtCore.QSize(75, 16777215))
+        self.lblMode.setText(QtGui.QApplication.translate("Dialog", "Cloze Mode", None, QtGui.QApplication.UnicodeUTF8))
+        self.lblMode.setAlignment(QtCore.Qt.AlignCenter)
+        self.lblMode.setObjectName(_fromUtf8("lblMode"))
+        self.horizontalLayout_4.addWidget(self.lblMode)
+        self.cmbMode = QtGui.QComboBox(Dialog)
+        self.cmbMode.setObjectName(_fromUtf8("cmbMode"))
+        self.horizontalLayout_4.addWidget(self.cmbMode)
+        self.lblModel = QtGui.QLabel(Dialog)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lblModel.sizePolicy().hasHeightForWidth())
+        self.lblModel.setSizePolicy(sizePolicy)
+        self.lblModel.setMaximumSize(QtCore.QSize(50, 16777215))
+        self.lblModel.setText(QtGui.QApplication.translate("Dialog", "Model", None, QtGui.QApplication.UnicodeUTF8))
+        self.lblModel.setAlignment(QtCore.Qt.AlignCenter)
+        self.lblModel.setObjectName(_fromUtf8("lblModel"))
+        self.horizontalLayout_4.addWidget(self.lblModel)
         self.modelcombobox = QtGui.QComboBox(Dialog)
         self.modelcombobox.setObjectName(_fromUtf8("modelcombobox"))
         self.horizontalLayout_4.addWidget(self.modelcombobox)

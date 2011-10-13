@@ -72,11 +72,14 @@ class AddDialog(dlgAddMcd.Ui_Dialog):
         self.modelcombobox.addItems(models)
         if modelidx is not None:
             self.modelcombobox.setCurrentIndex(modelidx)
-        # disable the model combo until we have better support
-        self.modelcombobox.setEnabled(False)
         self.tagslineedit.setDeck(mw.deck)
         self.configbutton.setIcon(QtGui.QIcon(':/icons/configure.png'))
-
+        # disable the model combo until we have better support
+        self.modelcombobox.setEnabled(False)
+        # add the MCD modes we support
+        modes = ["Manual", "Manual (;)"]
+        self.cmbMode.addItems(modes)
+		# connect the button signals to their functions
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL("helpRequested()"), self.help)
         QtCore.QObject.connect(self.addButton, QtCore.SIGNAL('clicked()'), self.addMcd)
         QtCore.QObject.connect(self.configbutton, QtCore.SIGNAL('clicked()'), self.configure)
@@ -94,8 +97,9 @@ class AddDialog(dlgAddMcd.Ui_Dialog):
         notesText = self.notesEdit.toPlainText()
         clozesText =  self.clozesEdit.text()
         tagsText = self.tagslineedit.text()
+        mode = self.cmbMode.currentIndex()
 		# create cards
-        status = mcdCloze.createCards(model, selectionText, clozesText, notesText, tagsText)
+        status = mcdCloze.createCards(model, selectionText, clozesText, notesText, tagsText, mode)
         # update the results
         self.statusLabel.setText(status)
 		# end busy cursor

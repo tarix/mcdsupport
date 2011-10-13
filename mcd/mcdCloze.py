@@ -17,10 +17,16 @@ from anki.errors import FactInvalidError
 
 CLOZETEXT = u'<span style="font-weight:600; color:#0000ff;">[...]</span>'
 
-def createCards(model, selection, clozes, notes, tags):
-    # convert the clozes from a string to a list
-    clozes = unicode.replace( unicode(clozes), u'\u3000', u' ' ) # replace wide spaces
-    listClozes = clozes.split(u' ')
+def createCards(model, selection, clozes, notes, tags, mode):
+    # Manual (space delimeter)
+    if mode == 0:
+        # convert the clozes from a string to a list
+        clozes = unicode.replace( unicode(clozes), u'\u3000', u' ' ) # replace wide spaces
+        listClozes = clozes.split(u' ')
+	# Manual (semicolon delimeter)
+    elif mode == 1:
+        # convert the clozes from a string to a list
+        listClozes = clozes.split(u';')
 	# convert tags string to anki tags
     tags = utils.canonifyTags(unicode(tags))	
     # counters for added/failed cards    
