@@ -46,9 +46,9 @@ def createCards(model, selection, clozes, notes, tags, mode):
         # create a new fact
         fact = mw.deck.newFact(model)
         # Japanese reading generation (newline hack from the Japanese support plugin)
-        fact.fields[2].value = unicode.replace( expression, u'\n', u'---newline---' )
+        fact.fields[2].value = expression.replace( "\n", "htmlNewLine" )
         fact.focusLost(fact.fields[2])
-        fact.fields[2].value = unicode.replace( fact.fields[2].value, u'---newline---', u'<br>' )
+        fact.fields[3].value = fact.fields[3].value.replace( "htmlNewLine", "<br>" )
         # add the rest of the fields
         fact.fields[0].value = unicode.replace( question, u'\n', u'<br>' )
         fact.fields[1].value = unicode.replace( answer, u'\n', u'<br>' )
@@ -68,6 +68,7 @@ def createCards(model, selection, clozes, notes, tags, mode):
     mw.reset()
 	# grab part of the card for the status update
     excerpt = uniSelection[:10]
+    excerpt = excerpt.replace('\n', ' ')
     if len(uniSelection) > 10: 
         excerpt += u'...'
     # build the results string
