@@ -110,7 +110,11 @@ class AddDialog(dlgAddMcd.Ui_Dialog):
         self.statusLabel.setText(status)
 		# see if we should clear any of the text boxes
         if mcdOptions.autoClearPassage == True:
-            self.selectionEdit.setPlainText("")
+            self.selectionEdit.setPlainText('')
+        if mcdOptions.autoClearNotes == True:
+            self.notesEdit.setPlainText('')
+        if mcdOptions.autoClearClozes == True:
+            self.clozesEdit.setText("")
 		# end busy cursor
         self.addButton.setEnabled(True)
         mw.app.restoreOverrideCursor()
