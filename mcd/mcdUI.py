@@ -23,11 +23,11 @@ import dlgAddMcd, dlgConfigure, mcdCloze, mcdOptions
 SHORTCUTKEY = "F9" # seems this does not conflict at all with the builtin cloze shortcut
 
 helpAddMcd = '''
-<p>MCD Support for Anki v0.1.3</p>
+<p><big><center><b>MCD Support for Anki v1.0.0</b></center></big></p>
 
-<p><big><b>Generating MCD cards</b></big></p>
+<p><b>Generating MCD cards</b></p>
 
-<p>First, past the text that contains the information that you want to learn in the "Phrase / Passage" box.</p>
+<p>First, paste the text that contains the information that you want to learn in the "Phrase / Passage" box.</p>
 
 <p>Next put any notes, definitions, source or other useful information about the passage in the "Notes" box.</p>
 
@@ -36,12 +36,16 @@ helpAddMcd = '''
 <p>If you want tags added to your cards be sure and add that in the tags field.</p>
 
 <p>To generate the cards press the Add button.  When the cards are done being added a small status line will display the results.</p>
+
+<p><b>Development</b></p>
+
+<p>This project is hosted on GitHub at <a href="https://github.com/tarix/mcdsupport">https://github.com/tarix/mcdsupport</a></p>
 '''
 
 helpConfigure = '''
-<p>MCD Support Configuration</p>
+<p><big><center><b>MCD Support Configuration</b></center></big></p>
 
-<p><big><b>Auto Clear</b></big></p>
+<p><b>Auto Clear</b></p>
 
 <p>Passage Text: If this is checked the passage text will be automatically cleared after new MCD cards are added.</p>
 <p>Notes Text: If this is checked the notes text will be automatically cleared after new MCD cards are added.</p>
