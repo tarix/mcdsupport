@@ -18,7 +18,7 @@ from anki import utils
 from ankiqt import mw, ui
 from anki.errors import FactInvalidError
 
-import dlgAddMcd, dlgConfigure, mcdCloze
+import dlgAddMcd, dlgConfigure, mcdCloze, mcdOptions
 
 SHORTCUTKEY = "F9" # seems this does not conflict at all with the builtin cloze shortcut
 
@@ -41,7 +41,11 @@ helpAddMcd = '''
 helpConfigure = '''
 <p>MCD Support Configuration</p>
 
-<p><big>Not yet written</big><p>
+<p><big><b>Auto Clear</b></big></p>
+
+<p>Passage Text: If this is checked the passage text will be automatically cleared after new MCD cards are added.</p>
+<p>Notes Text: If this is checked the notes text will be automatically cleared after new MCD cards are added.</p>
+<p>Clozes: If this is checked the clozes will be automatically cleared after new MCD cards are added.</p>
 
 '''
 
@@ -74,13 +78,15 @@ class AddDialog(dlgAddMcd.Ui_Dialog):
             self.modelcombobox.setCurrentIndex(modelidx)
         self.tagslineedit.setDeck(mw.deck)
         self.configbutton.setIcon(QtGui.QIcon(':/icons/configure.png'))
-        # disable the model combo until we have better support
-        self.modelcombobox.setEnabled(False)
         # add the MCD modes we support
         modes = ["Manual", "Manual (;)"]
         self.cmbMode.addItems(modes)
+        # disable the model combo until we support changing it
+        self.modelcombobox.setEnabled(False)
+        # disable the mode combo until we support changing it
+        self.cmbMode.setEnabled(False)
 		# connect the button signals to their functions
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL("helpRequested()"), self.help)
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL('helpRequested()'), self.help)
         QtCore.QObject.connect(self.addButton, QtCore.SIGNAL('clicked()'), self.addMcd)
         QtCore.QObject.connect(self.configbutton, QtCore.SIGNAL('clicked()'), self.configure)
     def help(self):
@@ -102,6 +108,9 @@ class AddDialog(dlgAddMcd.Ui_Dialog):
         status = mcdCloze.createCards(model, selectionText, clozesText, notesText, tagsText, mode)
         # update the results
         self.statusLabel.setText(status)
+		# see if we should clear any of the text boxes
+        if mcdOptions.autoClearPassage == True:
+            self.selectionEdit.setPlainText("")
 		# end busy cursor
         self.addButton.setEnabled(True)
         mw.app.restoreOverrideCursor()
@@ -116,31 +125,28 @@ class AddDialog(dlgAddMcd.Ui_Dialog):
 class Configure(dlgConfigure.Ui_Dialog):
     def setupUi(self, Dialog):
         dlgConfigure.Ui_Dialog.setupUi(self, Dialog)
-        # TODO: set up configuration dialog
-
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL("helpRequested()"), self.help)
-        #QtCore.QObject.connect(self.configbutton, QtCore.SIGNAL('clicked()'), self.addMcd)
+		# set the AutoClear options
+        self.chkAutoClearPassage.setChecked( mcdOptions.autoClearPassage )
+        self.chkAutoClearNotes.setChecked( mcdOptions.autoClearNotes )
+        self.chkAutoClearClozes.setChecked( mcdOptions.autoClearClozes )
+        # setup the signals
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL('accepted()'), self.okay)
+        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL('helpRequested()'), self.help)
+    def okay(self):
+        # begin busy cursor
+        mw.app.setOverrideCursor(QCursor(Qt.WaitCursor))
+        mw.app.processEvents()
+        # set the options
+        mcdOptions.autoClearPassage = self.chkAutoClearPassage.isChecked()
+        mcdOptions.autoClearNotes = self.chkAutoClearNotes.isChecked()
+        mcdOptions.autoClearClozes = self.chkAutoClearClozes.isChecked()
+        # save the options
+        mcdOptions.save()
+        # end busy cursor
+        mw.app.restoreOverrideCursor()
     def help(self):
         # show help text
         ui.utils.showText(helpConfigure, None, type='html')	
-    #def addMcd(self):
-    #    # begin busy cursor
-    #    mw.app.setOverrideCursor(QCursor(Qt.WaitCursor))
-    #    self.addButton.setEnabled(False)
-    #    mw.app.processEvents()
-    #    # get all user input
-    #    model = mw.deck.models[self.modelcombobox.currentIndex()]
-    #    selectionText = self.selectionEdit.toPlainText()
-    #    notesText = self.notesEdit.toPlainText()
-    #    clozesText =  self.clozesEdit.text()
-    #    tagsText = self.tagslineedit.text()
-	#	 # create cards
-    #     status = mcdCloze.createCards(model, selectionText, clozesText, notesText, tagsText)
-    #    # update the results
-    #    self.statusLabel.setText(status)
-    #    # end busy cursor
-    #    self.addButton.setEnabled(True)
-    #    mw.app.restoreOverrideCursor()
 
 def createMenu():
 	mw.mainWin.addMcd = QtGui.QAction('Add MCD Cards', mw)
