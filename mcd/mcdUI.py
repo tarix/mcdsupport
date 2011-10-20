@@ -23,7 +23,7 @@ import dlgAddMcd, dlgConfigure, mcdCloze, mcdOptions
 SHORTCUTKEY = "F9" # seems this does not conflict at all with the builtin cloze shortcut
 
 helpAddMcd = '''
-<p><big><center><b>MCD Support for Anki v1.0.0</b></center></big></p>
+<p><big><center><b>MCD Support for Anki v1.0.1</b></center></big></p>
 
 <p><b>Generating MCD cards</b></p>
 

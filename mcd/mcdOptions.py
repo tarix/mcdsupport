@@ -24,7 +24,7 @@ helpFirst = '''
 
 autoClearPassage = False
 autoClearNotes = False
-autoClearNotes = False
+autoClearClozes = False
 
 def save():
     # autoClearPassage
