@@ -17,27 +17,44 @@ from anki.errors import FactInvalidError
 
 CLOZETEXT = u'<span style="font-weight:600; color:#0000ff;">[...]</span>'
 
+def listManualSpace(clozes):
+    # convert the clozes from a string to a list
+    clozes = unicode.replace( unicode(clozes), u'\u3000', u' ' ) # replace wide spaces
+    listClozes = clozes.split(u' ')
+	# done
+    return listClozes
+
+def listManualSemicolon(clozes):
+    # convert the clozes from a string to a list
+    listClozes = clozes.split(u';')
+    # done
+    return listClozes
+
+def clozeAsian(selection, cloze):
+    # simply replace our selection directly
+	return unicode.replace( selection, cloze, CLOZETEXT )
+
 def createCards(model, selection, clozes, notes, tags, mode):
     # Manual (space delimeter)
     if mode == 0:
-        # convert the clozes from a string to a list
-        clozes = unicode.replace( unicode(clozes), u'\u3000', u' ' ) # replace wide spaces
-        listClozes = clozes.split(u' ')
+	    listClozes = listManualSpace(clozes)
 	# Manual (semicolon delimeter)
     elif mode == 1:
-        # convert the clozes from a string to a list
-        listClozes = clozes.split(u';')
+        listClozes = listManualSemicolon(clozes)
 	# convert tags string to anki tags
-    tags = utils.canonifyTags(unicode(tags))	
-    # counters for added/failed cards    
+    tags = utils.canonifyTags(unicode(tags))
+    # counters for added/failed cards
     added = 0
     failed = 0
 	# pre-convert unicode strings
     uniSelection = unicode(selection)
 	# process all of the closes
     for clz in listClozes:
+	    # skip empty clozes (for example double spaces)
+        if (clz.strip() == ''):
+            continue
         # formulate the new card
-        question = unicode.replace( uniSelection, unicode(clz), CLOZETEXT )
+        question = clozeAsian( uniSelection, unicode(clz) )
         answer = unicode(clz)
         expression = uniSelection
 		# check for cloze that did nothing

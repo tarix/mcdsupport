@@ -83,12 +83,12 @@ class AddDialog(dlgAddMcd.Ui_Dialog):
         self.tagslineedit.setDeck(mw.deck)
         self.configbutton.setIcon(QtGui.QIcon(':/icons/configure.png'))
         # add the MCD modes we support
-        modes = ["Manual", "Manual (;)"]
+        modes = ["Manual (Space)", "Manual (Semicolon)"]
         self.cmbMode.addItems(modes)
         # disable the model combo until we support changing it
         self.modelcombobox.setEnabled(False)
         # disable the mode combo until we support changing it
-        self.cmbMode.setEnabled(False)
+        #self.cmbMode.setEnabled(False)
 		# connect the button signals to their functions
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL('helpRequested()'), self.help)
         QtCore.QObject.connect(self.addButton, QtCore.SIGNAL('clicked()'), self.addMcd)
