@@ -16,6 +16,8 @@ def addBasicMcdModel(col):
     mm.addField(m, fm)
     fm = mm.newField("Notes")
     mm.addField(m, fm)
+    fm = mm.newField("Source")
+    mm.addField(m, fm)
     for i in range(99):
         n = i+1
         t = mm.newTemplate("MCD" + " %d" % n)
@@ -44,6 +46,8 @@ def addJapaneseMcdModel(col):
     fm = mm.newField("Reading")
     mm.addField(m, fm)
     fm = mm.newField("Notes")
+    mm.addField(m, fm)
+    fm = mm.newField("Source")
     mm.addField(m, fm)
     for i in range(99):
         n = i+1
