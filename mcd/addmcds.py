@@ -28,6 +28,7 @@ class AddMcds(QDialog):
     def __init__(self, mw):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
+        self.setWindowIcon(QtGui.QIcon(':/icons/list-add.png'))
         self.form = dlgAddMcds.Ui_Dialog()
         self.form.setupUi(self)
         self.setupCombos()
