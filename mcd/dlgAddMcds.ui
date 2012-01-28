@@ -48,29 +48,11 @@
         <widget class="QComboBox" name="cmbMode"/>
        </item>
        <item>
-        <widget class="QLabel" name="lblModel">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>55</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Note Type:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="cmdModel"/>
+        <layout class="QHBoxLayout" name="layModelChooser">
+         <item>
+          <widget class="QWidget" name="modelArea" native="true"/>
+         </item>
+        </layout>
        </item>
       </layout>
      </item>
@@ -181,7 +163,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="leSource">
+        <widget class="QLineEdit" name="lneSource">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -259,7 +241,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit">
+        <widget class="QLineEdit" name="lneDeck">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -297,7 +279,7 @@
         </widget>
        </item>
        <item>
-        <widget class="TagEdit" name="ateTags">
+        <widget class="QLineEdit" name="lneTags">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -322,7 +304,7 @@
      <item>
       <layout class="QHBoxLayout" name="layButtons">
        <item>
-        <widget class="QPushButton" name="configbutton">
+        <widget class="QPushButton" name="pbtConfigure">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -351,7 +333,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="addButton">
+        <widget class="QPushButton" name="pbtAdd">
          <property name="text">
           <string>Add</string>
          </property>
@@ -382,26 +364,18 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>TagEdit</class>
-   <extends>QLineEdit</extends>
-   <header location="global">aqt.tagedit</header>
-  </customwidget>
- </customwidgets>
  <tabstops>
   <tabstop>pteText</tabstop>
   <tabstop>pbtCopyText</tabstop>
   <tabstop>pushButton</tabstop>
   <tabstop>pushButton_2</tabstop>
   <tabstop>pteNotes</tabstop>
-  <tabstop>leSource</tabstop>
+  <tabstop>lneSource</tabstop>
   <tabstop>lneClozes</tabstop>
-  <tabstop>ateTags</tabstop>
+  <tabstop>lneTags</tabstop>
   <tabstop>cmbMode</tabstop>
-  <tabstop>cmdModel</tabstop>
-  <tabstop>configbutton</tabstop>
-  <tabstop>addButton</tabstop>
+  <tabstop>pbtConfigure</tabstop>
+  <tabstop>pbtAdd</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>
