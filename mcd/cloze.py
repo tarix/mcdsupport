@@ -41,13 +41,13 @@ class Cloze():
 
     def createNote(self):
         # Manual (space delimeter)
-        if self.mode == 0:
+        if self.mode == 'space':
             listClozes = listManualSpace(self.clozes)
         # Manual (semicolon delimeter)
-        elif self.mode == 1:
+        elif self.mode == 'semicolon':
             listClozes = listManualSemicolon(self.clozes)
         # Kanji/Hanzi
-        elif self.mode == 2:
+        elif self.mode == 'kanji':
             listClozes = listKanjiHanzi(self.clozes)
         # TODO: remove duplicates
         # grab part of the card for the status update

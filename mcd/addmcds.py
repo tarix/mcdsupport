@@ -16,12 +16,9 @@ from aqt.utils import showInfo, saveGeom, restoreGeom, askUser
 import aqt.modelchooser
 import aqt.tagedit
 
+import mcd
 from cloze import Cloze
 import dlgAddMcds
-
-# TODO: put this in a proper pair and move to __init__.py
-modes     = [ "space",          "semicolon",          "kanji" ]
-modeNames = [ "Manual (Space)", "Manual (Semicolon)", "Kanji/Hanzi" ]
 
 class AddMcds(QDialog):
 
@@ -41,7 +38,7 @@ class AddMcds(QDialog):
 
     def setupCombos(self):
 		# add MCD modes
-        self.form.cmbMode.addItems(modeNames)
+        self.form.cmbMode.addItems(mcd.modeNames)
 		# TODO: save/load the last used mode
 		# add the Model Chooser
         self.modelChooser = aqt.modelchooser.ModelChooser(self.mw, self.form.modelArea)
@@ -97,7 +94,7 @@ class AddMcds(QDialog):
         mw.app.processEvents()
         # get all user input
         cloze = Cloze();
-        cloze.mode = self.form.cmbMode.currentIndex()
+        cloze.mode = mcd.modes[ self.form.cmbMode.currentIndex() ]
         cloze.text = self.form.pteText.toPlainText()
         cloze.notes = self.form.pteNotes.toPlainText()
         cloze.source = self.form.lneSource.text()
