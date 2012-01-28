@@ -12,14 +12,14 @@ from PyQt4.QtCore import Qt, SIGNAL
 from PyQt4.QtGui import QDialog, QCursor
 
 from aqt import mw
-from aqt.utils import showInfo
+from aqt.utils import showInfo, saveGeom, restoreGeom, askUser
 import aqt.modelchooser
 import aqt.tagedit
 
 from cloze import Cloze
 import dlgAddMcds
 
-# TODO: put this in a proper pair and move to cloze.py
+# TODO: put this in a proper pair and move to __init__.py
 modes     = [ "space",          "semicolon",          "kanji" ]
 modeNames = [ "Manual (Space)", "Manual (Semicolon)", "Kanji/Hanzi" ]
 
@@ -33,16 +33,10 @@ class AddMcds(QDialog):
         self.setupCombos()
         self.setupTagsAndDeck()
         self.setupButtons()
-        #self.onReset()
-        #self.history = []
-        #restoreGeom(self, "addMcds")
-        #addHook('reset', self.onReset)
-        #addHook('currentModelChanged', self.onReset)
+        self.updateTagsAndDeck()
+        restoreGeom(self, "addMcds")
         self.mw.requireReset(modal=True)
         self.show()
-        #self.setupNewNote()
-        # move to reset function?
-        self.updateTagsAndDeck()
 
     def setupCombos(self):
 		# add MCD modes
@@ -53,7 +47,8 @@ class AddMcds(QDialog):
         
     def setupButtons(self):
         # set the configure icon
-        self.form.pbtConfigure.setIcon(QtGui.QIcon(':/icons/configure.png'))       
+        self.form.pbtConfigure.setIcon(QtGui.QIcon(':/icons/configure.png'))
+        self.form.pbtConfigure.hide()
         # connect the button signals to their functions
         QtCore.QObject.connect(self.form.pbtConfigure, QtCore.SIGNAL('clicked()'), self.configure)
         QtCore.QObject.connect(self.form.pbtAdd, QtCore.SIGNAL('clicked()'), self.addMcd)
@@ -76,21 +71,19 @@ class AddMcds(QDialog):
         self.deck = aqt.tagedit.TagEdit(self, type=1)
         self.deck.setSizePolicy(sizePolicy)
         self.form.layTags.insertWidget(1, self.deck) # put it just past the label
-        #self.deck.connect(self.deck, SIGNAL("lostFocus"), self.saveTagsAndDeck)       
         # set the tags
         self.tags = aqt.tagedit.TagEdit(self)
         self.tags.setSizePolicy(sizePolicy)
         self.form.layTags.insertWidget(3, self.tags) # put it just past the label
-        #self.tags.connect(self.tags, SIGNAL("lostFocus"), self.saveTagsAndDeck)
 
     def updateTagsAndDeck(self):
         if self.tags.col != self.mw.col:
             if self.deck:
                 self.deck.setCol(self.mw.col)
             self.tags.setCol(self.mw.col)
-        #if self.addMode:
-        #    self.deck.setText(self.mw.col.decks.name(self.note.did))
-        #self.tags.setText(self.note.stringTags().strip())
+
+    # Button Events
+    ######################################################################
 
     def configure(self):
         return showInfo("not yet implemented")
@@ -114,15 +107,10 @@ class AddMcds(QDialog):
         status = cloze.createNote()
         # update the results
         self.form.lblStatus.setText(status)
-        # clear the text box
-        self.form.pteText.setPlainText(u'')
-#		# see if we should clear any of the text boxes
-#       if mcdOptions.autoClearPassage == True:
-#            self.selectionEdit.setPlainText('')
-#        if mcdOptions.autoClearNotes == True:
-#            self.notesEdit.setPlainText('')
-#        if mcdOptions.autoClearClozes == True:
-#            self.clozesEdit.setText("")
+        # clear the form
+        self.form.pteText.clear()
+        self.form.pteNotes.clear()
+        self.form.lneClozes.clear()
 		# end busy cursor
         self.form.pbtAdd.setEnabled(True)
         mw.app.restoreOverrideCursor()
@@ -132,4 +120,19 @@ class AddMcds(QDialog):
 #        # show help text
 #        ui.utils.showText(helpAddMcd, None, type='html')	
 
+    # Dialog Close
+    ######################################################################
 
+    def reject(self):
+        if not self.canClose():
+            return
+        self.modelChooser.cleanup()
+        self.mw.maybeReset()
+        saveGeom(self, "add")
+        QDialog.reject(self)
+
+    def canClose(self):
+        has_data = self.form.pteText.toPlainText() or self.form.pteNotes.toPlainText()
+        if (not has_data or askUser(_("Close and lose current input?"))):
+            return True
+        return False

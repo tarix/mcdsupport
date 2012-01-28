@@ -11,8 +11,6 @@ from anki import utils
 
 from aqt import mw
 
-#from anki.errors import FactInvalidError
-
 def listManualSpace(clozes):
     clozes = unicode.replace( unicode(clozes), u'\u3000', u' ' ) # replace wide spaces
     return clozes.split(u' ')
