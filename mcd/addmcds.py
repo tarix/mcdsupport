@@ -128,7 +128,7 @@ class AddMcds(QDialog):
             return
         self.modelChooser.cleanup()
         self.mw.maybeReset()
-        saveGeom(self, "add")
+        saveGeom(self, "addMcds")
         QDialog.reject(self)
 
     def canClose(self):
