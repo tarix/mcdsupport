@@ -32,14 +32,13 @@ class AddMcds(QDialog):
         self.setupTagsAndDeck()
         self.setupButtons()
         self.updateTagsAndDeck()
-        restoreGeom(self, "addMcds")
+        self.restoreState()
         self.mw.requireReset(modal=True)
         self.show()
 
     def setupCombos(self):
 		# add MCD modes
         self.form.cmbMode.addItems(mcd.modeNames)
-		# TODO: save/load the last used mode
 		# add the Model Chooser
         self.modelChooser = aqt.modelchooser.ModelChooser(self.mw, self.form.modelArea)
         
@@ -80,6 +79,21 @@ class AddMcds(QDialog):
                 self.deck.setCol(self.mw.col)
             self.tags.setCol(self.mw.col)
 
+    # Save/Restore Dialog State
+    ######################################################################
+
+    def saveState(self):
+        self.mw.pm.profile['mcd.mode'] = self.form.cmbMode.currentIndex()
+        self.mw.pm.profile['mcd.deck'] = self.deck.text()
+        self.mw.pm.profile['mcd.tags'] = self.tags.text()
+        saveGeom(self, 'mcd.addMcds')
+    
+    def restoreState(self):
+        self.form.cmbMode.setCurrentIndex( self.mw.pm.profile.get('mcd.mode', 0) )
+        self.deck.setText( self.mw.pm.profile.get('mcd.deck') )
+        self.tags.setText( self.mw.pm.profile.get('mcd.tags') )
+        restoreGeom(self, 'mcd.addMcds')
+            
     # Button Events
     ######################################################################
 
@@ -124,9 +138,9 @@ class AddMcds(QDialog):
     def reject(self):
         if not self.canClose():
             return
+        self.saveState()
         self.modelChooser.cleanup()
         self.mw.maybeReset()
-        saveGeom(self, "addMcds")
         QDialog.reject(self)
 
     def canClose(self):
