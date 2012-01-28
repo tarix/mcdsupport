@@ -80,7 +80,7 @@ class Cloze():
         # deal with the source field
         if self.source:
             if source_id:
-                note.fields[ source_id ] = self.source
+                note.fields[ source_id[0] ] = self.source
             else:
                 self.notes = self.notes + u'<br><br>' + self.source
         # fill in the note fields
