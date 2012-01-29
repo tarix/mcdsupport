@@ -25,7 +25,7 @@
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>Phrase / Passage</string>
+          <string>Text</string>
          </property>
         </widget>
        </item>
