@@ -11,6 +11,12 @@ from anki import utils
 
 from aqt import mw
 
+# http://www.peterbe.com/plog/uniqifiers-benchmark
+def removeDups(seq): # Dave Kirby (f8)
+    # Order preserving
+    seen = set()
+    return [x for x in seq if x not in seen and not seen.add(x)]
+
 def listManualSpace(clozes):
     clozes = unicode.replace( unicode(clozes), u'\u3000', u' ' ) # replace wide spaces
     return clozes.split(u' ')
@@ -39,7 +45,7 @@ class Cloze():
         self.deck = u''
         self.tags = u''
 
-    def createNote(self):
+    def _generateClozeList(self):
         # Manual (space delimeter)
         if self.mode == 'space':
             listClozes = listManualSpace(self.clozes)
@@ -51,7 +57,13 @@ class Cloze():
             listClozes = listKanjiHanzi(self.clozes)
         # remove any empty (whitespace only) entries
         listClozes = [ clz for clz in listClozes if clz.strip() ]
-        # TODO: remove duplicates
+        # remove duplicates
+        listClozes = removeDups(listClozes)
+        return listClozes
+
+    def createNote(self):
+        # create a list of cloze candidates
+        listClozes = self._generateClozeList()
         # grab part of the card for the status update
         excerpt = self.text[:10]
         excerpt = excerpt.replace(u'\n', u' ')
