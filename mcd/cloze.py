@@ -49,6 +49,8 @@ class Cloze():
         # Kanji/Hanzi
         elif self.mode == 'kanji':
             listClozes = listKanjiHanzi(self.clozes)
+        # remove any empty (whitespace only) entries
+        listClozes = [ clz for clz in listClozes if clz.strip() ]
         # TODO: remove duplicates
         # grab part of the card for the status update
         excerpt = self.text[:10]
@@ -59,9 +61,6 @@ class Cloze():
         added = 0
         num_cloze = 0
         for clz in listClozes:
-	        # skip empty clozes (for example double spaces)
-            if (clz.strip() == ''):
-               continue
             num_cloze = num_cloze + 1
             # process this cloze
             self.text = clozeManual( self.text, clz, num_cloze )
