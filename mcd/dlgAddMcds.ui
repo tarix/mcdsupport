@@ -101,21 +101,21 @@
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="pbtCopyText">
+          <widget class="QPushButton" name="pbtTextToNotes">
            <property name="text">
             <string>Text → Notes</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton">
+          <widget class="QPushButton" name="pbtTextToClozes">
            <property name="text">
             <string>Text → Clozes</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_2">
+          <widget class="QPushButton" name="pbtNotesToText">
            <property name="text">
             <string>Notes → Text</string>
            </property>
@@ -366,9 +366,9 @@
  </widget>
  <tabstops>
   <tabstop>pteText</tabstop>
-  <tabstop>pbtCopyText</tabstop>
-  <tabstop>pushButton</tabstop>
-  <tabstop>pushButton_2</tabstop>
+  <tabstop>pbtTextToNotes</tabstop>
+  <tabstop>pbtTextToClozes</tabstop>
+  <tabstop>pbtNotesToText</tabstop>
   <tabstop>pteNotes</tabstop>
   <tabstop>lneSource</tabstop>
   <tabstop>lneClozes</tabstop>

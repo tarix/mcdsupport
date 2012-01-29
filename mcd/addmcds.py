@@ -20,6 +20,12 @@ import mcd
 from cloze import Cloze
 import dlgAddMcds
 
+def removeTabsAndNewlines(str):
+    str = str.replace('\t', '')
+    str = str.replace('\r', '')
+    str = str.replace('\n', '')
+    return str
+    
 class AddMcds(QDialog):
 
     def __init__(self, mw):
@@ -47,6 +53,9 @@ class AddMcds(QDialog):
         self.form.pbtConfigure.setIcon(QtGui.QIcon(':/icons/configure.png'))
         self.form.pbtConfigure.hide()
         # connect the button signals to their functions
+        QtCore.QObject.connect(self.form.pbtTextToNotes, QtCore.SIGNAL('clicked()'), self.copyTextToNotes)
+        QtCore.QObject.connect(self.form.pbtTextToClozes, QtCore.SIGNAL('clicked()'), self.copyTextToClozes)
+        QtCore.QObject.connect(self.form.pbtNotesToText, QtCore.SIGNAL('clicked()'), self.copyNotesToText)
         QtCore.QObject.connect(self.form.pbtConfigure, QtCore.SIGNAL('clicked()'), self.configure)
         QtCore.QObject.connect(self.form.pbtAdd, QtCore.SIGNAL('clicked()'), self.addMcd)
         QtCore.QObject.connect(self.form.buttonBox, QtCore.SIGNAL('helpRequested()'), self.helpRequested)
@@ -97,6 +106,19 @@ class AddMcds(QDialog):
     # Button Events
     ######################################################################
 
+    def copyTextToNotes(self):
+        text = self.form.pteText.toPlainText()
+        self.form.pteNotes.insertPlainText( text )
+    
+    def copyTextToClozes(self):
+        text = self.form.pteText.toPlainText()
+        text = removeTabsAndNewlines(text)
+        self.form.lneClozes.setText(text)
+    
+    def copyNotesToText(self):
+        notes = self.form.pteNotes.toPlainText()
+        self.form.pteText.insertPlainText( notes )
+    
     def configure(self):
         return showInfo("not yet implemented")
 
