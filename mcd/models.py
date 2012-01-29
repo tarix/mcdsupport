@@ -31,7 +31,7 @@ def addBasicMcdModel(col):
  color: blue;
 }"""
         t['qfmt'] = fmt % ""
-        t['afmt'] = fmt % "<br>\n{{Notes}}"
+        t['afmt'] = fmt % "<br>\n{{Notes}}<br>\n{{Source}}"
         mm.addTemplate(m, t)
     mm.add(m)
     return m
@@ -46,11 +46,11 @@ def addJapaneseMcdModel(col):
     m = mm.new("Japanese MCD")
     fm = mm.newField("Text")
     mm.addField(m, fm)
-    fm = mm.newField("Reading")
-    mm.addField(m, fm)
     fm = mm.newField("Notes")
     mm.addField(m, fm)
     fm = mm.newField("Source")
+    mm.addField(m, fm)
+    fm = mm.newField("Reading")
     mm.addField(m, fm)
     for i in range(99):
         n = i+1
@@ -62,7 +62,7 @@ def addJapaneseMcdModel(col):
  color: blue;
 }"""
         t['qfmt'] = fmt % ""
-        t['afmt'] = fmt % "<br>\n{{Reading}}<br>\n{{Notes}}"
+        t['afmt'] = fmt % "<br>\n{{Reading}}<br>\n{{Notes}}<br>\n{{Source}}"
         mm.addTemplate(m, t)
     mm.add(m)
     return m
