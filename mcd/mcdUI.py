@@ -78,6 +78,7 @@ def menuAddMcd():
 class AddDialog(dlgAddMcd.Ui_Dialog):
     def setupUi(self, Dialog, models, modelidx=None, tags=''):
         dlgAddMcd.Ui_Dialog.setupUi(self, Dialog)
+        Dialog.setWindowIcon(QtGui.QIcon(':/icons/list-add.png'))
         self.modelcombobox.addItems(models)
         if modelidx is not None:
             self.modelcombobox.setCurrentIndex(modelidx)
@@ -158,12 +159,12 @@ class Configure(dlgConfigure.Ui_Dialog):
         ui.utils.showText(helpConfigure, None, type='html')	
 
 def createMenu():
-	mw.mainWin.addMcd = QtGui.QAction('Add MCD Cards', mw)
-	mw.mainWin.addMcd.setStatusTip('Add MCD Cards')
-	mw.mainWin.addMcd.setEnabled(True)
-	mw.mainWin.addMcd.setShortcut(SHORTCUTKEY)
-	#mw.mainWin.addMcd.setIcon(QtGui.QIcon(ICONPATH))
-	mw.connect(mw.mainWin.addMcd, QtCore.SIGNAL('triggered()'), menuAddMcd)
-	mw.mainWin.menuTools.addAction(mw.mainWin.addMcd)
+    mw.mainWin.addMcd = QtGui.QAction('Add MCD Cards', mw)
+    mw.mainWin.addMcd.setStatusTip('Add MCD Cards')
+    mw.mainWin.addMcd.setEnabled(True)
+    mw.mainWin.addMcd.setShortcut(SHORTCUTKEY)
+    mw.mainWin.addMcd.setIcon(QtGui.QIcon(':/icons/list-add.png'))
+    mw.connect(mw.mainWin.addMcd, QtCore.SIGNAL('triggered()'), menuAddMcd)
+    mw.mainWin.menuTools.addAction(mw.mainWin.addMcd)
 
 createMenu()
