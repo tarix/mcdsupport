@@ -20,7 +20,7 @@ import mcd, dlgAddMcd, dlgConfigure, mcdCloze, mcdOptions
 SHORTCUTKEY = "F9" # seems this does not conflict at all with the builtin cloze shortcut
 
 helpAddMcd = '''
-<p><big><center><b>MCD Support for Anki v1.0.1</b></center></big></p>
+<p><big><center><b>MCD Support for Anki v$version$</b></center></big></p>
 
 <p><b>Generating MCD cards</b></p>
 
@@ -33,6 +33,10 @@ helpAddMcd = '''
 <p>If you want tags added to your cards be sure and add that in the tags field.</p>
 
 <p>To generate the cards press the Add button.  When the cards are done being added a small status line will display the results.</p>
+
+<p><b>Support</b></p>
+
+<p>For support please visit <a href="http://code.google.com/p/mcdsupport/">http://code.google.com/p/mcdsupport/</a></p>
 
 <p><b>Development</b></p>
 
@@ -91,7 +95,8 @@ class AddDialog(dlgAddMcd.Ui_Dialog):
         QtCore.QObject.connect(self.configbutton, QtCore.SIGNAL('clicked()'), self.configure)
     def help(self):
         # show help text
-        ui.utils.showText(helpAddMcd, None, type='html')	
+        text = helpAddMcd.replace('$version$', mcd.version)
+        ui.utils.showText(text, None, type='html')	
     def addMcd(self):
         # begin busy cursor
         mw.app.setOverrideCursor(QCursor(Qt.WaitCursor))

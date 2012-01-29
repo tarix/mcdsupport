@@ -7,6 +7,8 @@
 #
 # This free project is hosted by GitHub: https://github.com/tarix/mcdsupport
 
+version = "1.2-5"
+
 modes = [
     'space',
     'semicolon',
