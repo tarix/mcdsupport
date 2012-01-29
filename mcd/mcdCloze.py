@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 #
-# This is free and unencumbered software released into the public domain.
-#
 # Portions of this code are derived from the copyrighted works of:
 #    Damien Elmes <anki@ichi2.net>
 #    Adam Mesha <adam@mesha.org>
 #   
-# All rights of the original authors are reserved pursuiant to the following license:
-#    GNU GPL, version 3 or later; http://www.gnu.org/copyleft/gpl.html
+# License: GNU GPL, version 3 or later; http://www.gnu.org/copyleft/gpl.html
 #
 # This free project is hosted by GitHub: https://github.com/tarix/mcdsupport
 
@@ -30,17 +27,23 @@ def listManualSemicolon(clozes):
     # done
     return listClozes
 
-def clozeAsian(selection, cloze):
+def listKanjiHanzi(clozes):
+    return list( unicode(clozes) )
+
+def clozeManual(selection, cloze):
     # simply replace our selection directly
 	return unicode.replace( selection, cloze, CLOZETEXT )
 
 def createCards(model, selection, clozes, notes, tags, mode):
     # Manual (space delimeter)
-    if mode == 0:
+    if mode == 'space':
 	    listClozes = listManualSpace(clozes)
 	# Manual (semicolon delimeter)
-    elif mode == 1:
+    elif mode == 'semicolon':
         listClozes = listManualSemicolon(clozes)
+    # Auto: Kanji/Hanzi
+    elif mode == 'kanji':
+        listClozes = listKanjiHanzi(clozes)
 	# convert tags string to anki tags
     tags = utils.canonifyTags(unicode(tags))
     # counters for added/failed cards
@@ -54,7 +57,7 @@ def createCards(model, selection, clozes, notes, tags, mode):
         if (clz.strip() == ''):
             continue
         # formulate the new card
-        question = clozeAsian( uniSelection, unicode(clz) )
+        question = clozeManual( uniSelection, unicode(clz) )
         answer = unicode(clz)
         expression = uniSelection
 		# check for cloze that did nothing

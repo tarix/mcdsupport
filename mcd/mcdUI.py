@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 #
-# This is free and unencumbered software released into the public domain.
-#
 # Portions of this code are derived from the copyrighted works of:
 #    Damien Elmes <anki@ichi2.net>
 #    Adam Mesha <adam@mesha.org>
 #   
-# All rights of the original authors are reserved pursuiant to the following license:
-#    GNU GPL, version 3 or later; http://www.gnu.org/copyleft/gpl.html
+# License: GNU GPL, version 3 or later; http://www.gnu.org/copyleft/gpl.html
 #
 # This free project is hosted by GitHub: https://github.com/tarix/mcdsupport
 
@@ -18,7 +15,7 @@ from anki import utils
 from ankiqt import mw, ui
 from anki.errors import FactInvalidError
 
-import dlgAddMcd, dlgConfigure, mcdCloze, mcdOptions
+import mcd, dlgAddMcd, dlgConfigure, mcdCloze, mcdOptions
 
 SHORTCUTKEY = "F9" # seems this does not conflict at all with the builtin cloze shortcut
 
@@ -83,8 +80,7 @@ class AddDialog(dlgAddMcd.Ui_Dialog):
         self.tagslineedit.setDeck(mw.deck)
         self.configbutton.setIcon(QtGui.QIcon(':/icons/configure.png'))
         # add the MCD modes we support
-        modes = ["Manual (Space)", "Manual (Semicolon)"]
-        self.cmbMode.addItems(modes)
+        self.cmbMode.addItems( mcd.modeNames )
         # disable the model combo until we support changing it
         self.modelcombobox.setEnabled(False)
         # disable the mode combo until we support changing it
@@ -107,7 +103,7 @@ class AddDialog(dlgAddMcd.Ui_Dialog):
         notesText = self.notesEdit.toPlainText()
         clozesText =  self.clozesEdit.text()
         tagsText = self.tagslineedit.text()
-        mode = self.cmbMode.currentIndex()
+        mode = mcd.modes[ self.cmbMode.currentIndex() ]
 		# create cards
         status = mcdCloze.createCards(model, selectionText, clozesText, notesText, tagsText, mode)
         # update the results
