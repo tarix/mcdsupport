@@ -23,7 +23,7 @@ def listManualSpace(clozes):
 
 def listManualSemicolon(clozes):
     # convert the clozes from a string to a list
-    listClozes = clozes.split(u';')
+    listClozes = unicode( clozes ).split(u';')
     # done
     return listClozes
 
