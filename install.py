@@ -7,7 +7,7 @@ import os, sys, shutil
 # Anki helpers
 
 isMac = sys.platform.startswith("darwin")
-isWin = sys.platform.startswith("windows")
+isWin = sys.platform.startswith("win32")
 
 # ripped from ankiqt/aqt/profiles.py
 def ankiBase():
