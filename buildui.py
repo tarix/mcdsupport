@@ -1,3 +1,5 @@
+#!/usr/bin/python
+#
 # ui build script
 
 import os
@@ -16,8 +18,9 @@ def main():
     exe = pyuic[ os.name ]
     for form in forms:
         print 'Building '+form+' ...'
-        cmd = exe+' mcd\\'+form+'.ui 1> mcd\\'+form+'.py'
-        subprocess.call( cmd )
+        form_path = os.path.join('mcd', form)
+        cmd = exe+' '+form_path+'.ui 1> '+form_path+'.py'
+        subprocess.call( cmd, shell=True )
     return
 
 if __name__ == '__main__':
