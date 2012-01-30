@@ -12,7 +12,7 @@ from PyQt4.QtCore import Qt, SIGNAL
 from PyQt4.QtGui import QDialog, QCursor
 
 from aqt import mw
-from aqt.utils import showInfo, saveGeom, restoreGeom, askUser
+from aqt.utils import showInfo, saveGeom, restoreGeom, askUser, openLink
 import aqt.modelchooser
 import aqt.tagedit
 
@@ -150,9 +150,7 @@ class AddMcds(QDialog):
         mw.app.restoreOverrideCursor()
         
     def helpRequested(self):
-        return showInfo("not yet implemented")
-#        # show help text
-#        ui.utils.showText(helpAddMcd, None, type='html')	
+        openLink('http://code.google.com/p/mcdsupport/wiki/Help')
 
     # Dialog Close
     ######################################################################
