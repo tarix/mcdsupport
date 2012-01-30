@@ -1,0 +1,17 @@
+Requirements:
+
+    * Python 2.7
+    * PyQt4 v4.8.6 or later
+
+Building the UI:
+
+    ./buildui.py
+      -or-
+    python buildui.py
+
+Install to Anki Addons Folder:
+
+    ./install.py
+      -or-
+    python install.py
+
