@@ -25,7 +25,7 @@ def init():
     mw.form.actionAddMcd = QtGui.QAction('Add MCD Cards', mw)
     mw.form.actionAddMcd.setStatusTip('Add MCD Cards')
     mw.form.actionAddMcd.setEnabled(True)
-    #mw.form.actionAddMcd.setShortcut(SHORTCUTKEY)
+    mw.form.actionAddMcd.setShortcut('Ctrl+M')
     mw.form.actionAddMcd.setIcon(QtGui.QIcon(':/icons/list-add.png'))
     mw.connect(mw.form.actionAddMcd, QtCore.SIGNAL('triggered()'), menuAddMcds)
     mw.form.menuTools.addSeparator()
