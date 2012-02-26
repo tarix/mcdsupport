@@ -9,14 +9,20 @@
 
 version = "1.2-6"
 
-modes = [
+generic_modes = [
     'space',
     'semicolon',
+]
+
+japanese_modes = generic_modes + [
     'kanji'
 ]
 
-modeNames = [
+generic_modeNames = [
     u'Manual: Space',
     u'Manual: Semicolon',
+]
+
+japanese_modeNames = generic_modeNames + [
     u'Auto: 漢字'
 ]

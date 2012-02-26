@@ -59,13 +59,16 @@ def menuAddMcd():
         ui.utils.showInfo('No deck open.')
         return
     models = [m.name for m in mw.deck.models]
-	# TODO: make this search more generic
-    try:
-        modelidx = models.index('Japanese MCD')
-    except ValueError:
-        modelidx = None
+    # TODO: make this search more generic
+    for model in ['Japanese MCD', 'Generic MCD']:
+        try:
+            modelidx = models.index(model)
+            break
+        except ValueError:
+            modelidx = None
     if modelidx == None:
-        ui.utils.showInfo('The current deck does not have the Japanese MCD model.')
+        ui.utils.showInfo('The current deck does not have the \'Japanese MCD\' nor the' \
+                          ' \'Generic MCD\' model.')
         return
     tags = ''
     d = QtGui.QDialog(mw)
@@ -85,19 +88,21 @@ class AddDialog(dlgAddMcd.Ui_Dialog):
         self.tagslineedit.setDeck(mw.deck)
         self.configbutton.setIcon(QtGui.QIcon(':/icons/configure.png'))
         # add the MCD modes we support
-        self.cmbMode.addItems( mcd.modeNames )
+        modeNames = mcd.japanese_modeNames if models[modelidx] == 'Japanese MCD' else \
+                    mcd.generic_modeNames
+        self.cmbMode.addItems( modeNames )
         # disable the model combo until we support changing it
         self.modelcombobox.setEnabled(False)
         # disable the mode combo until we support changing it
         #self.cmbMode.setEnabled(False)
-		# connect the button signals to their functions
+        # connect the button signals to their functions
         QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL('helpRequested()'), self.help)
         QtCore.QObject.connect(self.addButton, QtCore.SIGNAL('clicked()'), self.addMcd)
         QtCore.QObject.connect(self.configbutton, QtCore.SIGNAL('clicked()'), self.configure)
     def help(self):
         # show help text
         text = helpAddMcd.replace('$version$', mcd.version)
-        ui.utils.showText(text, None, type='html')	
+        ui.utils.showText(text, None, type='html')  
     def addMcd(self):
         # begin busy cursor
         mw.app.setOverrideCursor(QCursor(Qt.WaitCursor))
@@ -109,19 +114,21 @@ class AddDialog(dlgAddMcd.Ui_Dialog):
         notesText = self.notesEdit.toPlainText()
         clozesText =  self.clozesEdit.text()
         tagsText = self.tagslineedit.text()
-        mode = mcd.modes[ self.cmbMode.currentIndex() ]
-		# create cards
+        modes = mcd.japanese_modes if model.name == 'Japanese MCD' else \
+                mcd.generic_modes
+        mode = modes[ self.cmbMode.currentIndex() ]
+        # create cards
         status = mcdCloze.createCards(model, selectionText, clozesText, notesText, tagsText, mode)
         # update the results
         self.statusLabel.setText(status)
-		# see if we should clear any of the text boxes
+        # see if we should clear any of the text boxes
         if mcdOptions.autoClearPassage == True:
             self.selectionEdit.setPlainText('')
         if mcdOptions.autoClearNotes == True:
             self.notesEdit.setPlainText('')
         if mcdOptions.autoClearClozes == True:
             self.clozesEdit.setText("")
-		# end busy cursor
+        # end busy cursor
         self.addButton.setEnabled(True)
         mw.app.restoreOverrideCursor()
     def configure(self):
@@ -135,7 +142,7 @@ class AddDialog(dlgAddMcd.Ui_Dialog):
 class Configure(dlgConfigure.Ui_Dialog):
     def setupUi(self, Dialog):
         dlgConfigure.Ui_Dialog.setupUi(self, Dialog)
-		# set the AutoClear options
+        # set the AutoClear options
         self.chkAutoClearPassage.setChecked( mcdOptions.autoClearPassage )
         self.chkAutoClearNotes.setChecked( mcdOptions.autoClearNotes )
         self.chkAutoClearClozes.setChecked( mcdOptions.autoClearClozes )
@@ -156,7 +163,7 @@ class Configure(dlgConfigure.Ui_Dialog):
         mw.app.restoreOverrideCursor()
     def help(self):
         # show help text
-        ui.utils.showText(helpConfigure, None, type='html')	
+        ui.utils.showText(helpConfigure, None, type='html') 
 
 def createMenu():
     mw.mainWin.addMcd = QtGui.QAction('Add MCD Cards', mw)

@@ -66,14 +66,16 @@ def createCards(model, selection, clozes, notes, tags, mode):
         # create a new fact
         fact = mw.deck.newFact(model)
         # Japanese reading generation (newline hack from the Japanese support plugin)
-        fact.fields[2].value = expression.replace( "\n", "htmlNewLine" )
-        fact.focusLost(fact.fields[2])
-        fact.fields[3].value = fact.fields[3].value.replace( "htmlNewLine", "<br>" )
+        if model.name == 'Japanese MCD':
+            fact.fields[2].value = expression.replace( "\n", "htmlNewLine" )
+            fact.focusLost(fact.fields[2])
+            fact.fields[3].value = fact.fields[3].value.replace( "htmlNewLine", "<br>" )
         # add the rest of the fields
         fact.fields[0].value = unicode.replace( question, u'\n', u'<br>' )
         fact.fields[1].value = unicode.replace( answer, u'\n', u'<br>' )
         fact.fields[2].value = unicode.replace( expression, u'\n', u'<br>' )
-        fact.fields[4].value = unicode.replace( unicode(notes), u'\n', u'<br>' )
+        idx = 4 if model.name == 'Japanese MCD' else 3
+        fact.fields[idx].value = unicode.replace( unicode(notes), u'\n', u'<br>' )
         fact.tags = tags
         # add the fact to the deck
         try:
