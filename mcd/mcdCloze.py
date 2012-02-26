@@ -18,7 +18,7 @@ def listManualSpace(clozes):
     # convert the clozes from a string to a list
     clozes = unicode.replace( unicode(clozes), u'\u3000', u' ' ) # replace wide spaces
     listClozes = clozes.split(u' ')
-	# done
+    # done
     return listClozes
 
 def listManualSemicolon(clozes):
@@ -32,48 +32,50 @@ def listKanjiHanzi(clozes):
 
 def clozeManual(selection, cloze):
     # simply replace our selection directly
-	return unicode.replace( selection, cloze, CLOZETEXT )
+    return unicode.replace( selection, cloze, CLOZETEXT )
 
 def createCards(model, selection, clozes, notes, tags, mode):
     # Manual (space delimeter)
     if mode == 'space':
-	    listClozes = listManualSpace(clozes)
-	# Manual (semicolon delimeter)
+        listClozes = listManualSpace(clozes)
+    # Manual (semicolon delimeter)
     elif mode == 'semicolon':
         listClozes = listManualSemicolon(clozes)
     # Auto: Kanji/Hanzi
     elif mode == 'kanji':
         listClozes = listKanjiHanzi(clozes)
-	# convert tags string to anki tags
+    # convert tags string to anki tags
     tags = utils.canonifyTags(unicode(tags))
     # counters for added/failed cards
     added = 0
     failed = 0
-	# pre-convert unicode strings
+    # pre-convert unicode strings
     uniSelection = unicode(selection)
-	# process all of the closes
+    # process all of the closes
     for clz in listClozes:
-	    # skip empty clozes (for example double spaces)
+        # skip empty clozes (for example double spaces)
         if (clz.strip() == ''):
             continue
         # formulate the new card
         question = clozeManual( uniSelection, unicode(clz) )
         answer = unicode(clz)
         expression = uniSelection
-		# check for cloze that did nothing
+        # check for cloze that did nothing
         if question == expression:
             continue
         # create a new fact
         fact = mw.deck.newFact(model)
         # Japanese reading generation (newline hack from the Japanese support plugin)
-        fact.fields[2].value = expression.replace( "\n", "htmlNewLine" )
-        fact.focusLost(fact.fields[2])
-        fact.fields[3].value = fact.fields[3].value.replace( "htmlNewLine", "<br>" )
+        if model.name == 'Japanese MCD':
+            fact.fields[2].value = expression.replace( "\n", "htmlNewLine" )
+            fact.focusLost(fact.fields[2])
+            fact.fields[3].value = fact.fields[3].value.replace( "htmlNewLine", "<br>" )
         # add the rest of the fields
         fact.fields[0].value = unicode.replace( question, u'\n', u'<br>' )
         fact.fields[1].value = unicode.replace( answer, u'\n', u'<br>' )
         fact.fields[2].value = unicode.replace( expression, u'\n', u'<br>' )
-        fact.fields[4].value = unicode.replace( unicode(notes), u'\n', u'<br>' )
+        idx = 4 if model.name == 'Japanese MCD' else 3
+        fact.fields[idx].value = unicode.replace( unicode(notes), u'\n', u'<br>' )
         fact.tags = tags
         # add the fact to the deck
         try:
@@ -86,7 +88,7 @@ def createCards(model, selection, clozes, notes, tags, mode):
     mw.deck.rebuildCSS()
     mw.deck.save()
     mw.reset()
-	# grab part of the card for the status update
+    # grab part of the card for the status update
     excerpt = uniSelection[:10]
     excerpt = excerpt.replace('\n', ' ')
     if len(uniSelection) > 10: 
@@ -94,6 +96,6 @@ def createCards(model, selection, clozes, notes, tags, mode):
     # build the results string
     status = u'Processed \'{0}\'  Added {1} new {2}.'.format(excerpt, added, 'card' if added == 1 else 'cards')
     if failed > 0:
-	    status += u'  Skipped {0} {1}.'.format(failed, 'card' if failed == 1 else 'cards')
-	
+        status += u'  Skipped {0} {1}.'.format(failed, 'card' if failed == 1 else 'cards')
+    
     return status

@@ -11,8 +11,9 @@
 # This free project is hosted by GitHub: https://github.com/tarix/mcdsupport
 
 def init():
-	import mcd.modelJP
-	import mcd.mcdUI
+    import mcd.modelJP
+    import mcd.modelGEN
+    import mcd.mcdUI
 
 from ankiqt import mw
 mw.registerPlugin("MCD Support", 0)
