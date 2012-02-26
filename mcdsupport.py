@@ -12,6 +12,7 @@
 
 def init():
 	import mcd.modelJP
+	import mcd.modelGEN
 	import mcd.mcdUI
 
 from ankiqt import mw
