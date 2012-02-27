@@ -53,11 +53,11 @@ def onLoadDeck():
     autoClearClozes = mw.deck.getBool('plugin.mcdsupport.autoClearClozes')
     if (autoClearClozes is None):
         autoClearClozes = False
-	# check for message of the day
+    # check for message of the day
     motd = mw.deck.getVar('plugin.mcdsupport.motd')
     if (motd is None):
         # this means its a new deck
-        ui.utils.showText(helpFirst, None, type='html')	
+        ui.utils.showText(helpFirst, None, type='html') 
         motd = 0
     # use this in the future to display upgrade messages
     if (motd is not 1):
