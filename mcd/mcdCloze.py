@@ -11,6 +11,8 @@
 from anki import utils
 from ankiqt import mw
 from anki.errors import FactInvalidError
+from japanese.reading import tool as mecab
+from mcdMecab import parse
 
 CLOZETEXT = u'<span style="font-weight:600; color:#0000ff;">[...]</span>'
 
@@ -35,6 +37,9 @@ def clozeManual(selection, cloze):
     return unicode.replace( selection, cloze, CLOZETEXT )
 
 def createCards(model, selection, clozes, notes, tags, mode):
+    # pre-convert unicode strings
+    uniSelection = unicode(selection)
+
     # Manual (space delimeter)
     if mode == 'space':
         listClozes = listManualSpace(clozes)
@@ -44,32 +49,46 @@ def createCards(model, selection, clozes, notes, tags, mode):
     # Auto: Kanji/Hanzi
     elif mode == 'kanji':
         listClozes = listKanjiHanzi(clozes)
-    # convert tags string to anki tags
+    elif mode == 'mecab':
+        nonStandardClozeTextAsHTMLDoesntWork = '(...)'
+        listClozes = parse(mecab.reading(uniSelection), nonStandardClozeTextAsHTMLDoesntWork)
+
+	# convert tags string to anki tags
     tags = utils.canonifyTags(unicode(tags))
     # counters for added/failed cards
     added = 0
     failed = 0
-    # pre-convert unicode strings
-    uniSelection = unicode(selection)
+
     # process all of the closes
     for clz in listClozes:
-        # skip empty clozes (for example double spaces)
-        if (clz.strip() == ''):
-            continue
-        # formulate the new card
-        question = clozeManual( uniSelection, unicode(clz) )
-        answer = unicode(clz)
-        expression = uniSelection
-        # check for cloze that did nothing
-        if question == expression:
-            continue
+
         # create a new fact
         fact = mw.deck.newFact(model)
-        # Japanese reading generation (newline hack from the Japanese support plugin)
-        if model.name == 'Japanese MCD':
-            fact.fields[2].value = expression.replace( "\n", "htmlNewLine" )
-            fact.focusLost(fact.fields[2])
-            fact.fields[3].value = fact.fields[3].value.replace( "htmlNewLine", "<br>" )
+
+        if mode == 'mecab':
+          question = clz[0] + '\n'
+          answer = clz[1]
+          expression = clz[2]
+          fact.fields[3].value = clz[3]
+        else:
+              # skip empty clozes (for example double spaces)
+          if (clz.strip() == ''):
+              continue
+          # formulate the new card
+          question = clozeManual( uniSelection, unicode(clz) )
+          answer = unicode(clz)
+          expression = uniSelection
+
+          # check for cloze that did nothing
+          if question == expression:
+              continue
+
+          # Japanese reading generation (newline hack from the Japanese support plugin)
+          if model.name == 'Japanese MCD':
+             fact.fields[2].value = expression.replace( "\n", "htmlNewLine" )
+             fact.focusLost(fact.fields[2])
+             fact.fields[3].value = fact.fields[3].value.replace( "htmlNewLine", "<br>" )
+   
         # add the rest of the fields
         fact.fields[0].value = unicode.replace( question, u'\n', u'<br>' )
         fact.fields[1].value = unicode.replace( answer, u'\n', u'<br>' )

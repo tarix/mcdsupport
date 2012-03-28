@@ -11,18 +11,20 @@ version = "1.2-6"
 
 generic_modes = [
     'space',
-    'semicolon',
+    'semicolon'
 ]
 
 japanese_modes = generic_modes + [
-    'kanji'
+    'kanji',
+    'mecab'
 ]
 
 generic_modeNames = [
     u'Manual: Space',
-    u'Manual: Semicolon',
+    u'Manual: Semicolon'
 ]
 
 japanese_modeNames = generic_modeNames + [
-    u'Auto: 漢字'
+    u'Auto: 漢字',
+    u'Auto: Mecab'
 ]
