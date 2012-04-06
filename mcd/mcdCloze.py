@@ -11,8 +11,7 @@
 from anki import utils
 from ankiqt import mw
 from anki.errors import FactInvalidError
-from japanese.reading import tool as mecab
-from mcdMecab import parse
+from mcdMecab import listMecab
 
 CLOZETEXT = u'<span style="font-weight:600; color:#0000ff;">[...]</span>'
 
@@ -50,8 +49,7 @@ def createCards(model, selection, clozes, notes, tags, mode):
     elif mode == 'kanji':
         listClozes = listKanjiHanzi(clozes)
     elif mode == 'mecab':
-        nonStandardClozeTextAsHTMLDoesntWork = '(...)'
-        listClozes = parse(mecab.reading(uniSelection), nonStandardClozeTextAsHTMLDoesntWork)
+        listClozes = listMecab(uniSelection, CLOZETEXT)
 
 	# convert tags string to anki tags
     tags = utils.canonifyTags(unicode(tags))
@@ -65,11 +63,14 @@ def createCards(model, selection, clozes, notes, tags, mode):
         # create a new fact
         fact = mw.deck.newFact(model)
 
+        def setField(index, value):
+          fact.fields[index].value = unicode.replace( value, u'\n', u'<br>' )
+
         if mode == 'mecab':
-          question = clz[0] + '\n'
+          question = clz[0]
           answer = clz[1]
           expression = clz[2]
-          fact.fields[3].value = clz[3]
+          setField(3, clz[3])
         else:
               # skip empty clozes (for example double spaces)
           if (clz.strip() == ''):
@@ -90,11 +91,11 @@ def createCards(model, selection, clozes, notes, tags, mode):
              fact.fields[3].value = fact.fields[3].value.replace( "htmlNewLine", "<br>" )
    
         # add the rest of the fields
-        fact.fields[0].value = unicode.replace( question, u'\n', u'<br>' )
-        fact.fields[1].value = unicode.replace( answer, u'\n', u'<br>' )
-        fact.fields[2].value = unicode.replace( expression, u'\n', u'<br>' )
+        setField(0, question)
+        setField(1, answer)
+        setField(2, expression)
         idx = 4 if model.name == 'Japanese MCD' else 3
-        fact.fields[idx].value = unicode.replace( unicode(notes), u'\n', u'<br>' )
+        setField(idx, unicode(notes))
         fact.tags = tags
         # add the fact to the deck
         try:
