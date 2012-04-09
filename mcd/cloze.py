@@ -81,9 +81,9 @@ class Cloze():
         note = mw.col.newNote()
         # set the deck
         if not self.deck.strip():
-            note.did = 1
+            note.model()['did'] = 1
         else:
-            note.did = mw.col.decks.id(self.deck)
+            note.model()['did'] = mw.col.decks.id(self.deck)
         # set the tags
         note.tags = mw.col.tags.split(self.tags)
         # see if we have a source field
