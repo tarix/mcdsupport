@@ -87,19 +87,21 @@ class AddMcds(QDialog):
             if self.deck:
                 self.deck.setCol(self.mw.col)
             self.tags.setCol(self.mw.col)
+        current_deck = self.mw.col.decks.name(self.mw.col.decks.selected())
+        self.deck.setText(current_deck)
 
     # Save/Restore Dialog State
     ######################################################################
 
     def saveState(self):
         self.mw.pm.profile['mcd.mode'] = self.form.cmbMode.currentIndex()
-        self.mw.pm.profile['mcd.deck'] = self.deck.text()
+        #self.mw.pm.profile['mcd.deck'] = self.deck.text()
         self.mw.pm.profile['mcd.tags'] = self.tags.text()
         saveGeom(self, 'mcd.addMcds')
     
     def restoreState(self):
         self.form.cmbMode.setCurrentIndex( self.mw.pm.profile.get('mcd.mode', 0) )
-        self.deck.setText( self.mw.pm.profile.get('mcd.deck') )
+        #self.deck.setText( self.mw.pm.profile.get('mcd.deck') )
         self.tags.setText( self.mw.pm.profile.get('mcd.tags') )
         restoreGeom(self, 'mcd.addMcds')
             
