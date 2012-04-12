@@ -11,8 +11,10 @@ files = [
     'mcd\\dlgAddMcd.py',
     'mcd\\dlgConfigure.py',
     'mcd\\mcdCloze.py',
+    'mcd\\mcdMecab.py',
     'mcd\\mcdOptions.py',
     'mcd\\mcdUI.py',
+    'mcd\\modelGEN.py',
     'mcd\\modelJP.py',
 ]
 
