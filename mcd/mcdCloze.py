@@ -11,6 +11,7 @@
 from anki import utils
 from ankiqt import mw
 from anki.errors import FactInvalidError
+from mcdMecab import listMecab
 
 CLOZETEXT = u'<span style="font-weight:600; color:#0000ff;">[...]</span>'
 
@@ -35,6 +36,9 @@ def clozeManual(selection, cloze):
     return unicode.replace( selection, cloze, CLOZETEXT )
 
 def createCards(model, selection, clozes, notes, tags, mode):
+    # pre-convert unicode strings
+    uniSelection = unicode(selection)
+
     # Manual (space delimeter)
     if mode == 'space':
         listClozes = listManualSpace(clozes)
@@ -44,38 +48,54 @@ def createCards(model, selection, clozes, notes, tags, mode):
     # Auto: Kanji/Hanzi
     elif mode == 'kanji':
         listClozes = listKanjiHanzi(clozes)
-    # convert tags string to anki tags
+    elif mode == 'mecab':
+        listClozes = listMecab(uniSelection, CLOZETEXT)
+
+	# convert tags string to anki tags
     tags = utils.canonifyTags(unicode(tags))
     # counters for added/failed cards
     added = 0
     failed = 0
-    # pre-convert unicode strings
-    uniSelection = unicode(selection)
+
     # process all of the closes
     for clz in listClozes:
-        # skip empty clozes (for example double spaces)
-        if (clz.strip() == ''):
-            continue
-        # formulate the new card
-        question = clozeManual( uniSelection, unicode(clz) )
-        answer = unicode(clz)
-        expression = uniSelection
-        # check for cloze that did nothing
-        if question == expression:
-            continue
+
         # create a new fact
         fact = mw.deck.newFact(model)
-        # Japanese reading generation (newline hack from the Japanese support plugin)
-        if model.name == 'Japanese MCD':
-            fact.fields[2].value = expression.replace( "\n", "htmlNewLine" )
-            fact.focusLost(fact.fields[2])
-            fact.fields[3].value = fact.fields[3].value.replace( "htmlNewLine", "<br>" )
+
+        def setField(index, value):
+          fact.fields[index].value = unicode.replace( value, u'\n', u'<br>' )
+
+        if mode == 'mecab':
+          question = clz[0]
+          answer = clz[1]
+          expression = clz[2]
+          setField(3, clz[3])
+        else:
+              # skip empty clozes (for example double spaces)
+          if (clz.strip() == ''):
+              continue
+          # formulate the new card
+          question = clozeManual( uniSelection, unicode(clz) )
+          answer = unicode(clz)
+          expression = uniSelection
+
+          # check for cloze that did nothing
+          if question == expression:
+              continue
+
+          # Japanese reading generation (newline hack from the Japanese support plugin)
+          if model.name == 'Japanese MCD':
+             fact.fields[2].value = expression.replace( "\n", "htmlNewLine" )
+             fact.focusLost(fact.fields[2])
+             fact.fields[3].value = fact.fields[3].value.replace( "htmlNewLine", "<br>" )
+   
         # add the rest of the fields
-        fact.fields[0].value = unicode.replace( question, u'\n', u'<br>' )
-        fact.fields[1].value = unicode.replace( answer, u'\n', u'<br>' )
-        fact.fields[2].value = unicode.replace( expression, u'\n', u'<br>' )
+        setField(0, question)
+        setField(1, answer)
+        setField(2, expression)
         idx = 4 if model.name == 'Japanese MCD' else 3
-        fact.fields[idx].value = unicode.replace( unicode(notes), u'\n', u'<br>' )
+        setField(idx, unicode(notes))
         fact.tags = tags
         # add the fact to the deck
         try:
