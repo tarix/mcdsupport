@@ -87,20 +87,24 @@ class AddMcds(QDialog):
             if self.deck:
                 self.deck.setCol(self.mw.col)
             self.tags.setCol(self.mw.col)
+        current_deck = self.mw.col.decks.name(self.mw.col.decks.selected())
+        self.deck.setText(current_deck)
 
     # Save/Restore Dialog State
     ######################################################################
 
     def saveState(self):
         self.mw.pm.profile['mcd.mode'] = self.form.cmbMode.currentIndex()
-        self.mw.pm.profile['mcd.deck'] = self.deck.text()
+        #self.mw.pm.profile['mcd.deck'] = self.deck.text()
         self.mw.pm.profile['mcd.tags'] = self.tags.text()
+        self.mw.pm.profile['mcd.whole_words'] = self.form.cbxWholeWord.isChecked()
         saveGeom(self, 'mcd.addMcds')
     
     def restoreState(self):
         self.form.cmbMode.setCurrentIndex( self.mw.pm.profile.get('mcd.mode', 0) )
-        self.deck.setText( self.mw.pm.profile.get('mcd.deck') )
+        #self.deck.setText( self.mw.pm.profile.get('mcd.deck') )
         self.tags.setText( self.mw.pm.profile.get('mcd.tags') )
+        self.form.cbxWholeWord.setChecked( self.mw.pm.profile.get('mcd.whole_words', False) )
         restoreGeom(self, 'mcd.addMcds')
             
     # Button Events
@@ -135,6 +139,7 @@ class AddMcds(QDialog):
         cloze.notes = self.form.pteNotes.toPlainText()
         cloze.source = self.form.lneSource.text()
         cloze.clozes = self.form.lneClozes.text()
+        cloze.whole_words_only = self.form.cbxWholeWord.isChecked()
         cloze.deck = self.deck.text()
         cloze.tags = self.tags.text()
 		# create the note

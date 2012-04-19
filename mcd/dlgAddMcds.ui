@@ -339,6 +339,13 @@
         </spacer>
        </item>
        <item>
+         <widget class="QCheckBox" name="cbxWholeWord">
+           <property name="text">
+             <string>Whole words only</string>
+           </property>
+         </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="pbtAdd">
          <property name="text">
           <string>Add</string>

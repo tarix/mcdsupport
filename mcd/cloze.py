@@ -7,6 +7,8 @@
 #
 # This project is hosted on GitHub: https://github.com/tarix/mcdsupport
 
+import re
+
 from anki import utils
 
 from aqt import mw
@@ -27,9 +29,11 @@ def listManualSemicolon(clozes):
 def listKanjiHanzi(clozes):
     return list(clozes)
 
-def clozeManual(text, cloze, num):
+def clozeManual(text, cloze, num, whole_words_only):
     # simply replace our selection directly
     cloze_text = u'{{c%d::' % num + cloze + u'}}'
+    if whole_words_only:
+        return re.sub(ur'\b{}\b'.format(cloze), cloze_text, text, flags=re.UNICODE)
     return unicode.replace( text, cloze, cloze_text )
 
 class Cloze():
@@ -40,6 +44,7 @@ class Cloze():
         self.notes = u''
         self.source = None
         self.clozes = u''
+        self.whole_words_only = False
         # anki vars
         self.model = u''
         self.deck = u''
@@ -75,15 +80,15 @@ class Cloze():
         for clz in listClozes:
             num_cloze = num_cloze + 1
             # process this cloze
-            self.text = clozeManual( self.text, clz, num_cloze )
+            self.text = clozeManual( self.text, clz, num_cloze, self.whole_words_only )
         # TODO: deal with embedded clozes
         # create the new note
         note = mw.col.newNote()
         # set the deck
         if not self.deck.strip():
-            note.did = 1
+            note.model()['did'] = 1
         else:
-            note.did = mw.col.decks.id(self.deck)
+            note.model()['did'] = mw.col.decks.id(self.deck)
         # set the tags
         note.tags = mw.col.tags.split(self.tags)
         # see if we have a source field
