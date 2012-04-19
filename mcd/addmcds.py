@@ -139,6 +139,7 @@ class AddMcds(QDialog):
         cloze.notes = self.form.pteNotes.toPlainText()
         cloze.source = self.form.lneSource.text()
         cloze.clozes = self.form.lneClozes.text()
+        cloze.whole_words_only = self.form.cbxWholeWord.isChecked()
         cloze.deck = self.deck.text()
         cloze.tags = self.tags.text()
 		# create the note
