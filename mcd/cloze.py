@@ -33,7 +33,7 @@ def clozeManual(text, cloze, num, whole_words_only):
     # simply replace our selection directly
     cloze_text = u'{{c%d::' % num + cloze + u'}}'
     if whole_words_only:
-        return re.sub(r'\b{}\b'.format(cloze), cloze_text, text)
+        return re.sub(ur'\b{}\b'.format(cloze), cloze_text, text, flags=re.UNICODE)
     return unicode.replace( text, cloze, cloze_text )
 
 class Cloze():
