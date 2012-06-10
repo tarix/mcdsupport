@@ -178,6 +178,25 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QPushButton" name="tbtWholeWords">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Whole Words Only</string>
+         </property>
+         <property name="text">
+          <string>W</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
@@ -339,13 +358,6 @@
         </spacer>
        </item>
        <item>
-         <widget class="QCheckBox" name="cbxWholeWord">
-           <property name="text">
-             <string>Whole words only</string>
-           </property>
-         </widget>
-       </item>
-       <item>
         <widget class="QPushButton" name="pbtAdd">
          <property name="text">
           <string>Add</string>
@@ -379,16 +391,18 @@
  </widget>
  <tabstops>
   <tabstop>pteText</tabstop>
+  <tabstop>pteNotes</tabstop>
+  <tabstop>lneClozes</tabstop>
+  <tabstop>lneSource</tabstop>
+  <tabstop>lneDeck</tabstop>
+  <tabstop>lneTags</tabstop>
+  <tabstop>pbtAdd</tabstop>
+  <tabstop>cmbMode</tabstop>
   <tabstop>pbtTextToNotes</tabstop>
   <tabstop>pbtTextToClozes</tabstop>
   <tabstop>pbtNotesToText</tabstop>
-  <tabstop>pteNotes</tabstop>
-  <tabstop>lneSource</tabstop>
-  <tabstop>lneClozes</tabstop>
-  <tabstop>lneTags</tabstop>
-  <tabstop>cmbMode</tabstop>
+  <tabstop>tbtWholeWords</tabstop>
   <tabstop>pbtConfigure</tabstop>
-  <tabstop>pbtAdd</tabstop>
   <tabstop>buttonBox</tabstop>
  </tabstops>
  <resources/>
