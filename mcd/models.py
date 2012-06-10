@@ -15,24 +15,22 @@ from anki.stdmodels import models
 def addBasicMcdModel(col):
     mm = col.models
     m = mm.new("Basic MCD")
+    m['css'] += """
+.cloze {
+ font-weight: bold;
+ color: blue;
+}"""
     fm = mm.newField("Text")
     mm.addField(m, fm)
     fm = mm.newField("Notes")
     mm.addField(m, fm)
     fm = mm.newField("Source")
     mm.addField(m, fm)
-    for i in range(99):
-        n = i+1
-        t = mm.newTemplate("MCD" + " %d" % n)
-        fmt = "{{cloze:%d:Text}}%%s" % n
-        t['css'] += """
-.cloze {
- font-weight: bold;
- color: blue;
-}"""
-        t['qfmt'] = fmt % ""
-        t['afmt'] = fmt % "<br>\n{{Notes}}<br>\n{{Source}}"
-        mm.addTemplate(m, t)
+    t = mm.newTemplate("Basic MCD")
+    fmt = "{{cloze:Text}}%s"
+    t['qfmt'] = fmt % ""
+    t['afmt'] = fmt % "<br>\n{{Notes}}<br>\n{{Source}}"
+    mm.addTemplate(m, t)
     mm.add(m)
     return m
 
@@ -44,6 +42,11 @@ models.append(("Basic MCD", addBasicMcdModel))
 def addJapaneseMcdModel(col):
     mm = col.models
     m = mm.new("Japanese MCD")
+    m['css'] += """
+.cloze {
+ font-weight: bold;
+ color: blue;
+}"""
     fm = mm.newField("Text")
     mm.addField(m, fm)
     fm = mm.newField("Notes")
@@ -52,18 +55,11 @@ def addJapaneseMcdModel(col):
     mm.addField(m, fm)
     fm = mm.newField("Reading")
     mm.addField(m, fm)
-    for i in range(99):
-        n = i+1
-        t = mm.newTemplate("MCD" + " %d" % n)
-        fmt = "{{cloze:%d:Text}}%%s" % n
-        t['css'] += """
-.cloze {
- font-weight: bold;
- color: blue;
-}"""
-        t['qfmt'] = fmt % ""
-        t['afmt'] = fmt % "<br>\n{{Reading}}<br>\n{{Notes}}<br>\n{{Source}}"
-        mm.addTemplate(m, t)
+    t = mm.newTemplate("Japanese MCD")
+    fmt = "{{cloze:Text}}%s"
+    t['qfmt'] = fmt % ""
+    t['afmt'] = fmt % "<br>\n{{Reading}}<br>\n{{Notes}}<br>\n{{Source}}"
+    mm.addTemplate(m, t)
     mm.add(m)
     return m
 
