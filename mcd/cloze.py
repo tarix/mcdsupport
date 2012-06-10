@@ -111,8 +111,7 @@ class Cloze():
                 from japanese.reading import mecab
                 note.fields[ reading_id[0] ] = mecab.reading(reading)
             except:
-                raise
-                #return u'Unable to generate the reading. Please install the Japanese Support Plugin.'
+                return u'Unable to generate the reading. Please install the Japanese Support Plugin.'
         # fill in the note fields
         note.fields[0] = self.text
         note.fields[1] = self.notes
