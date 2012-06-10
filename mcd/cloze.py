@@ -34,7 +34,8 @@ def clozeManual(text, cloze, num, whole_words_only):
     cloze_text = u'{{c%d::' % num + cloze + u'}}'
     if whole_words_only:
         return re.sub(ur'\b{}\b'.format(cloze), cloze_text, text, flags=re.UNICODE)
-    return unicode.replace( text, cloze, cloze_text )
+    else: 
+        return unicode.replace( text, cloze, cloze_text )
 
 class Cloze():
     def __init__(self):
@@ -81,6 +82,8 @@ class Cloze():
             num_cloze = num_cloze + 1
             # process this cloze
             self.text = clozeManual( self.text, clz, num_cloze, self.whole_words_only )
+        # convert the newlines to html
+	    self.text = unicode.replace( self.text, '\n', '</br>' )
         # TODO: deal with embedded clozes
         # create the new note
         note = mw.col.newNote()
