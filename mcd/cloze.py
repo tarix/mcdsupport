@@ -34,7 +34,7 @@ def clozeManual(text, cloze, num, whole_words_only):
     cloze_text = u'{{c%d::' % num + cloze + u'}}'
     if whole_words_only:
         return re.sub(ur'\b{}\b'.format(cloze), cloze_text, text, flags=re.UNICODE)
-    else: 
+    else:
         return unicode.replace( text, cloze, cloze_text )
 
 class Cloze():
@@ -73,8 +73,10 @@ class Cloze():
         # grab part of the card for the status update
         excerpt = self.text[:10]
         excerpt = excerpt.replace(u'\n', u' ')
-        if len(self.text) > 10: 
+        if len(self.text) > 10:
             excerpt += u'...'
+        # save the text for the reading generation
+        reading = self.text
         # process all of the closes
         added = 0
         num_cloze = 0
@@ -83,7 +85,7 @@ class Cloze():
             # process this cloze
             self.text = clozeManual( self.text, clz, num_cloze, self.whole_words_only )
         # convert the newlines to html
-	    self.text = unicode.replace( self.text, '\n', '</br>' )
+        self.text = unicode.replace( self.text, '\n', '</br>' )
         # TODO: deal with embedded clozes
         # create the new note
         note = mw.col.newNote()
@@ -102,6 +104,15 @@ class Cloze():
                 note.fields[ source_id[0] ] = self.source
             else:
                 self.notes = self.notes + u'<br><br>' + self.source
+        # check for a reading field
+        reading_id = mw.col.models.fieldMap( note.model() ).get('Reading', None)
+        if reading_id:
+            try:
+                from japanese.reading import mecab
+                note.fields[ reading_id[0] ] = mecab.reading(reading)
+            except:
+                raise
+                #return u'Unable to generate the reading. Please install the Japanese Support Plugin.'
         # fill in the note fields
         note.fields[0] = self.text
         note.fields[1] = self.notes
