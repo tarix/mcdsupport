@@ -43,7 +43,7 @@ class Cloze():
         self.mode = 0
         self.text = u''
         self.notes = u''
-        self.source = None
+        self.source = u''
         self.clozes = u''
         self.whole_words_only = False
         # anki vars
@@ -75,6 +75,10 @@ class Cloze():
         excerpt = excerpt.replace(u'\n', u' ')
         if len(self.text) > 10:
             excerpt += u'...'
+        # convert the newlines to html
+        self.text = unicode.replace( self.text, '\n', '<br>' )
+        self.notes = unicode.replace( self.notes, '\n', '<br>' )
+        self.source = unicode.replace( self.source, '\n', '<br>' )            
         # save the text for the reading generation
         reading = self.text
         # process all of the closes
@@ -84,8 +88,6 @@ class Cloze():
             num_cloze = num_cloze + 1
             # process this cloze
             self.text = clozeManual( self.text, clz, num_cloze, self.whole_words_only )
-        # convert the newlines to html
-        self.text = unicode.replace( self.text, '\n', '</br>' )
         # TODO: deal with embedded clozes
         # create the new note
         note = mw.col.newNote()
@@ -96,10 +98,9 @@ class Cloze():
             note.model()['did'] = mw.col.decks.id(self.deck)
         # set the tags
         note.tags = mw.col.tags.split(self.tags)
-        # see if we have a source field
-        source_id = mw.col.models.fieldMap( note.model() ).get('Source', None)
         # deal with the source field
-        if self.source:
+        if len(self.source):
+            source_id = mw.col.models.fieldMap( note.model() ).get('Source', None)
             if source_id:
                 note.fields[ source_id[0] ] = self.source
             else:
