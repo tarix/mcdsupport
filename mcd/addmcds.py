@@ -40,6 +40,7 @@ class AddMcds(QDialog):
         self.updateTagsAndDeck()
         self.restoreState()
         self.mw.requireReset(modal=True)
+        self.setWindowTitle( self.windowTitle()+' ('+mcd.appname+')' )
         self.show()
 
     def setupCombos(self):
