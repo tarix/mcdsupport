@@ -15,6 +15,7 @@ from anki.stdmodels import models
 def addBasicMcdModel(col):
     mm = col.models
     m = mm.new("Basic MCD")
+    m['type'] = MODEL_CLOZE    
     m['css'] += """
 .cloze {
  font-weight: bold;
@@ -34,7 +35,7 @@ def addBasicMcdModel(col):
     mm.add(m)
     return m
 
-models.append(("Basic MCD", addBasicMcdModel))
+models.append((lambda: _("Basic MCD"), addBasicMcdModel))
 
 # Japanese MCD
 ##########################################################################
@@ -42,6 +43,7 @@ models.append(("Basic MCD", addBasicMcdModel))
 def addJapaneseMcdModel(col):
     mm = col.models
     m = mm.new("Japanese MCD")
+    m['type'] = MODEL_CLOZE    
     m['css'] += """
 .cloze {
  font-weight: bold;
@@ -63,4 +65,4 @@ def addJapaneseMcdModel(col):
     mm.add(m)
     return m
 
-models.append(("Japanese MCD", addJapaneseMcdModel))
+models.append((lambda: _("Japanese MCD"), addJapaneseMcdModel))
