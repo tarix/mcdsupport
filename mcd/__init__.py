@@ -7,7 +7,7 @@
 #
 # This project is hosted on GitHub: https://github.com/tarix/mcdsupport
 
-version = u'2.0-3'
+version = u'2.0-4'
 appname = u'MCD Support v'+version
 
 modes = [

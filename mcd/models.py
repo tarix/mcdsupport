@@ -7,6 +7,7 @@
 #
 # This project is hosted on GitHub: https://github.com/tarix/mcdsupport
 
+from anki.consts import MODEL_CLOZE
 from anki.stdmodels import models
 
 # Basic MCD
