@@ -25,9 +25,15 @@ def menuAddMcds():
 def menuRandomizeDeck():
     # randomize the currently selected deck
     deck = mw.col.decks.current()
-    # TODO: check the deck configuration
-    mw.col.sched.randomizeCards( deck['id'] )
-    tooltip(deck['name']+' randomized.', period=5000)
+    # get this deck configuration
+    conf = mw.col.decks.confForDid( deck['id'] )
+    # only randomize if the current deck is set to random
+    if conf['new']['order'] == 0:
+        mw.col.sched.randomizeCards( deck['id'] )
+        tip = deck['name']+' randomized.'
+    else:
+        tip = deck['name']+' is not a random deck.'
+    tooltip( tip, period=5000 )
 
 def init():
     mw.form.menuTools.addSeparator()
