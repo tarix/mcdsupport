@@ -10,6 +10,7 @@
 import re
 
 from anki import utils
+from anki.consts import *
 
 from aqt import mw
 
@@ -50,6 +51,8 @@ class Cloze():
         self.model = u''
         self.deck = u''
         self.tags = u''
+        # status
+        self.status = u''
 
     def _generateClozeList(self):
         # Manual (space delimeter)
@@ -68,6 +71,17 @@ class Cloze():
         return listClozes
 
     def createNote(self):
+        # create the new note
+        note = mw.col.newNote()
+        # set the deck
+        if not self.deck.strip():
+            note.model()['did'] = 1
+        else:
+            note.model()['did'] = mw.col.decks.id(self.deck)
+        # verify this is an Anki 2 cloze model
+        if not note.model()['type'] == MODEL_CLOZE:
+            self.status = u'Error: '+note.model()['name']+' is not a Cloze model.' 
+            return False
         # create a list of cloze candidates
         listClozes = self._generateClozeList()
         # grab part of the card for the status update
@@ -89,13 +103,6 @@ class Cloze():
             # process this cloze
             self.text = clozeManual( self.text, clz, num_cloze, self.whole_words_only )
         # TODO: deal with embedded clozes
-        # create the new note
-        note = mw.col.newNote()
-        # set the deck
-        if not self.deck.strip():
-            note.model()['did'] = 1
-        else:
-            note.model()['did'] = mw.col.decks.id(self.deck)
         # set the tags
         note.tags = mw.col.tags.split(self.tags)
         # deal with the source field
@@ -112,17 +119,19 @@ class Cloze():
                 from japanese.reading import mecab
                 note.fields[ reading_id[0] ] = mecab.reading(reading)
             except:
-                return u'Unable to generate the reading. Please install the Japanese Support Plugin.'
+                self.status = u'Error: Unable to generate the reading. Please install the Japanese Support Plugin.'
+                return False
         # fill in the note fields
         note.fields[0] = self.text
         note.fields[1] = self.notes
         # check for errors
         if note.dupeOrEmpty():
-            return u'Error: Note is empty or a duplicate'
+            self.status = u'Error: Note is empty or a duplicate'
+            return False
         cards = mw.col.addNote(note)
         # save the collection
         mw.col.autosave()
-        # TODO: Japanese reading generation
-        # return the results
-        status = u'Added \'{0}\' with {1} {2}.'.format(excerpt, num_cloze, u'cloze' if num_cloze == 1 else u'clozes')
-        return status
+        # set the status
+        self.status = u'Added a new note \'{0}\' with {1} {2}.'.format(excerpt, num_cloze, u'cloze' if num_cloze == 1 else u'clozes')
+        # return success
+        return True

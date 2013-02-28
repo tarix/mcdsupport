@@ -144,13 +144,14 @@ class AddMcds(QDialog):
         cloze.deck = self.deck.text()
         cloze.tags = self.tags.text()
 		# create the note
-        status = cloze.createNote()
+        okay = cloze.createNote()
         # update the results
-        self.form.lblStatus.setText(status)
+        self.form.lblStatus.setText(cloze.status)
         # clear the form
-        self.form.pteText.clear()
-        self.form.pteNotes.clear()
-        self.form.lneClozes.clear()
+        if okay:
+            self.form.pteText.clear()
+            self.form.pteNotes.clear()
+            self.form.lneClozes.clear()
 		# end busy cursor
         self.form.pbtAdd.setEnabled(True)
         mw.app.restoreOverrideCursor()
