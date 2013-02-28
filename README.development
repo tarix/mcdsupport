@@ -2,6 +2,7 @@ Requirements:
 
     * Python 2.7
     * PyQt4 v4.8.6 or later
+    * Homebrew users can install python and pyqt
 
 Building the UI:
 
