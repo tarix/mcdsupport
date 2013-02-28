@@ -30,14 +30,6 @@ def listManualSemicolon(clozes):
 def listKanjiHanzi(clozes):
     return list(clozes)
 
-def clozeManual(text, cloze, num, whole_words_only):
-    # simply replace our selection directly
-    cloze_text = u'{{c%d::' % num + cloze + u'}}'
-    if whole_words_only:
-        return re.sub(ur'\b{}\b'.format(cloze), cloze_text, text, flags=re.UNICODE)
-    else:
-        return unicode.replace( text, cloze, cloze_text )
-
 class Cloze():
     def __init__(self):
         # cloze vars
@@ -70,6 +62,24 @@ class Cloze():
         listClozes = removeDups(listClozes)
         return listClozes
 
+    def _clozeReplace(self, text, cloze, cloze_text):
+        # process the replacement based on user options
+        if self.whole_words_only:
+            return re.sub(ur'\b{}\b'.format(cloze), cloze_text, text, flags=re.UNICODE)
+        else:
+            return unicode.replace( text, cloze, cloze_text )
+
+    def _clozePrepare(self, text, cloze, num):
+        # replace the text with a cloze sub
+        cloze_stub = u'{{c%d::' % num + u'}}'
+        return self._clozeReplace( text, cloze, cloze_stub )
+
+    def _clozeFinalize(self, text, cloze, num):
+        # replace the subs with the final cloze
+        cloze_stub = u'{{c%d::' % num + u'}}'
+        cloze_text = u'{{c%d::' % num + cloze + u'}}'
+        return unicode.replace( text, cloze_stub, cloze_text )
+
     def createNote(self):
         # create the new note
         note = mw.col.newNote()
@@ -95,14 +105,12 @@ class Cloze():
         self.source = unicode.replace( self.source, '\n', '<br>' )            
         # save the text for the reading generation
         reading = self.text
-        # process all of the closes
-        added = 0
-        num_cloze = 0
-        for clz in listClozes:
-            num_cloze = num_cloze + 1
-            # process this cloze
-            self.text = clozeManual( self.text, clz, num_cloze, self.whole_words_only )
-        # TODO: deal with embedded clozes
+        # pre-process all of the closes
+        for i, clz in enumerate(listClozes):
+            self.text = self._clozePrepare( self.text, clz, i+1 )
+        # finalize the clozes, this two stage process prevents errors with embedded clozes
+        for i, clz in enumerate(listClozes):
+            self.text = self._clozeFinalize( self.text, clz, i+1 )
         # set the tags
         note.tags = mw.col.tags.split(self.tags)
         # deal with the source field
@@ -132,6 +140,6 @@ class Cloze():
         # save the collection
         mw.col.autosave()
         # set the status
-        self.status = u'Added a new note \'{0}\' with {1} {2}.'.format(excerpt, num_cloze, u'cloze' if num_cloze == 1 else u'clozes')
+        self.status = u'Added a new note \'{0}\' with {1} {2}.'.format(excerpt, len(listClozes), u'cloze' if len(listClozes) == 1 else u'clozes')
         # return success
         return True
