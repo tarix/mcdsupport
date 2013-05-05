@@ -128,9 +128,9 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pbtClozesToNotes">
+          <widget class="QPushButton" name="pbtDictionaryLookup">
            <property name="text">
-            <string>Clozes → Notes</string>
+            <string>Dictionary Lookup</string>
            </property>
           </widget>
          </item>

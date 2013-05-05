@@ -59,7 +59,7 @@ class AddMcds(QDialog):
         QtCore.QObject.connect(self.form.pbtTextToNotes, QtCore.SIGNAL('clicked()'), self.copyTextToNotes)
         QtCore.QObject.connect(self.form.pbtTextToClozes, QtCore.SIGNAL('clicked()'), self.copyTextToClozes)
         QtCore.QObject.connect(self.form.pbtNotesToText, QtCore.SIGNAL('clicked()'), self.copyNotesToText)
-        QtCore.QObject.connect(self.form.pbtClozesToNotes, QtCore.SIGNAL('clicked()'), self.copyClozesToNotes)
+        QtCore.QObject.connect(self.form.pbtDictionaryLookup, QtCore.SIGNAL('clicked()'), self.dictionaryLookup)
         QtCore.QObject.connect(self.form.pbtConfigure, QtCore.SIGNAL('clicked()'), self.configure)
         QtCore.QObject.connect(self.form.pbtAdd, QtCore.SIGNAL('clicked()'), self.addMcd)
         QtCore.QObject.connect(self.form.buttonBox, QtCore.SIGNAL('helpRequested()'), self.helpRequested)
@@ -127,7 +127,7 @@ class AddMcds(QDialog):
         notes = self.form.pteNotes.toPlainText()
         self.form.pteText.insertPlainText( notes )
 
-    def copyClozesToNotes(self):
+    def dictionaryLookup(self):
         self.language = japanese.initLanguage()
         text = self.form.lneClozes.displayText()
         text2 = ""
