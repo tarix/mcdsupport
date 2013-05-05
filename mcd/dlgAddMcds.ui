@@ -127,6 +127,13 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QPushButton" name="pbtClozesToNotes">
+           <property name="text">
+            <string>Clozes → Notes</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item>
