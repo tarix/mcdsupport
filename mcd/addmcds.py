@@ -20,12 +20,14 @@ import mcd
 from cloze import Cloze
 import dlgAddMcds
 
+from lang import japanese
+
 def removeTabsAndNewlines(str):
     str = str.replace('\t', '')
     str = str.replace('\r', '')
     str = str.replace('\n', '')
     return str
-    
+
 class AddMcds(QDialog):
 
     def __init__(self, mw):
@@ -48,7 +50,7 @@ class AddMcds(QDialog):
         self.form.cmbMode.addItems(mcd.modeNames)
 		# add the Model Chooser
         self.modelChooser = aqt.modelchooser.ModelChooser(self.mw, self.form.modelArea)
-        
+
     def setupButtons(self):
         # set the configure icon
         self.form.pbtConfigure.setIcon(QtGui.QIcon(':/icons/configure.png'))
@@ -57,6 +59,7 @@ class AddMcds(QDialog):
         QtCore.QObject.connect(self.form.pbtTextToNotes, QtCore.SIGNAL('clicked()'), self.copyTextToNotes)
         QtCore.QObject.connect(self.form.pbtTextToClozes, QtCore.SIGNAL('clicked()'), self.copyTextToClozes)
         QtCore.QObject.connect(self.form.pbtNotesToText, QtCore.SIGNAL('clicked()'), self.copyNotesToText)
+        QtCore.QObject.connect(self.form.pbtDictionaryLookup, QtCore.SIGNAL('clicked()'), self.dictionaryLookup)
         QtCore.QObject.connect(self.form.pbtConfigure, QtCore.SIGNAL('clicked()'), self.configure)
         QtCore.QObject.connect(self.form.pbtAdd, QtCore.SIGNAL('clicked()'), self.addMcd)
         QtCore.QObject.connect(self.form.buttonBox, QtCore.SIGNAL('helpRequested()'), self.helpRequested)
@@ -100,30 +103,41 @@ class AddMcds(QDialog):
         self.mw.pm.profile['mcd.tags'] = self.tags.text()
         self.mw.pm.profile['mcd.whole_words'] = self.form.tbtWholeWords.isChecked()
         saveGeom(self, 'mcd.addMcds')
-    
+
     def restoreState(self):
         self.form.cmbMode.setCurrentIndex( self.mw.pm.profile.get('mcd.mode', 0) )
         #self.deck.setText( self.mw.pm.profile.get('mcd.deck') )
         self.tags.setText( self.mw.pm.profile.get('mcd.tags') )
         self.form.tbtWholeWords.setChecked( self.mw.pm.profile.get('mcd.whole_words', False) )
         restoreGeom(self, 'mcd.addMcds')
-            
+
     # Button Events
     ######################################################################
 
     def copyTextToNotes(self):
         text = self.form.pteText.toPlainText()
         self.form.pteNotes.insertPlainText( text )
-    
+
     def copyTextToClozes(self):
         text = self.form.pteText.toPlainText()
         text = removeTabsAndNewlines(text)
         self.form.lneClozes.setText(text)
-    
+
     def copyNotesToText(self):
         notes = self.form.pteNotes.toPlainText()
         self.form.pteText.insertPlainText( notes )
-    
+
+    def dictionaryLookup(self):
+        self.language = japanese.initLanguage()
+        text = self.form.lneClozes.displayText()
+        text2 = ""
+        listClozes = unicode.replace( unicode(text), u'\u3000', u' ' ).split(u' ')
+        for word in listClozes:
+            results = (self.language.wordSearch(word,1,0))
+            for data in results[:-1]:
+                text2 += data[0][0] + " [" + data[0][1] + "] " + data[0][2] + "\n"
+        self.form.pteNotes.insertPlainText( text2 )
+
     def configure(self):
         return showInfo("not yet implemented")
 
@@ -155,7 +169,7 @@ class AddMcds(QDialog):
 		# end busy cursor
         self.form.pbtAdd.setEnabled(True)
         mw.app.restoreOverrideCursor()
-        
+
     def helpRequested(self):
         openLink('http://code.google.com/p/mcdsupport/wiki/Help')
 
