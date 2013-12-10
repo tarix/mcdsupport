@@ -32,6 +32,8 @@ def listKanjiHanzi(clozes):
 
 class Cloze():
     def __init__(self):
+        # grab reference to anki globals
+        self.mw = mw
         # cloze vars
         self.mode = 0
         self.text = u''
@@ -82,12 +84,12 @@ class Cloze():
 
     def createNote(self):
         # create the new note
-        note = mw.col.newNote()
+        note = self.mw.col.newNote()
         # set the deck
         if not self.deck.strip():
             note.model()['did'] = 1
         else:
-            note.model()['did'] = mw.col.decks.id(self.deck)
+            note.model()['did'] = self.mw.col.decks.id(self.deck)
         # verify this is an Anki 2 cloze model
         if not note.model()['type'] == MODEL_CLOZE:
             self.status = u'Error: '+note.model()['name']+' is not a Cloze model.' 
@@ -112,16 +114,16 @@ class Cloze():
         for i, clz in enumerate(listClozes):
             self.text = self._clozeFinalize( self.text, clz, i+1 )
         # set the tags
-        note.tags = mw.col.tags.split(self.tags)
+        note.tags = self.mw.col.tags.split(self.tags)
         # deal with the source field
         if len(self.source):
-            source_id = mw.col.models.fieldMap( note.model() ).get('Source', None)
+            source_id = self.mw.col.models.fieldMap( note.model() ).get('Source', None)
             if source_id:
                 note.fields[ source_id[0] ] = self.source
             else:
                 self.notes = self.notes + u'<br><br>' + self.source
         # check for a reading field
-        reading_id = mw.col.models.fieldMap( note.model() ).get('Reading', None)
+        reading_id = self.mw.col.models.fieldMap( note.model() ).get('Reading', None)
         if reading_id:
             try:
                 from japanese.reading import mecab
@@ -134,11 +136,17 @@ class Cloze():
         note.fields[1] = self.notes
         # check for errors
         if note.dupeOrEmpty():
-            self.status = u'Error: Note is empty or a duplicate'
+            self.status = u'Error: Note is empty or a duplicate.'
             return False
-        cards = mw.col.addNote(note)
+        # add the new note
+        cards = self.mw.col.addNote(note)
+        if not cards:
+            self.status = u'Error: This note was not able to generate any cards.'
+            return False
+        # flag the queue for reset
+        self.mw.requireReset()
         # save the collection
-        mw.col.autosave()
+        self.mw.col.autosave()
         # set the status
         self.status = u'Added a new note \'{0}\' with {1} {2}.'.format(excerpt, len(listClozes), u'cloze' if len(listClozes) == 1 else u'clozes')
         # return success

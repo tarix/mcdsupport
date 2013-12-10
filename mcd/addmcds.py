@@ -129,10 +129,10 @@ class AddMcds(QDialog):
 
     def addMcd(self):
         # begin busy cursor
-        mw.app.setOverrideCursor(QCursor(Qt.WaitCursor))
+        self.mw.app.setOverrideCursor(QCursor(Qt.WaitCursor))
         self.form.lblStatus.setText(u'')
         self.form.pbtAdd.setEnabled(False)
-        mw.app.processEvents()
+        self.mw.app.processEvents()
         # get all user input
         cloze = Cloze();
         cloze.mode = mcd.modes[ self.form.cmbMode.currentIndex() ]
@@ -154,7 +154,7 @@ class AddMcds(QDialog):
             self.form.lneClozes.clear()
 		# end busy cursor
         self.form.pbtAdd.setEnabled(True)
-        mw.app.restoreOverrideCursor()
+        self.mw.app.restoreOverrideCursor()
         
     def helpRequested(self):
         openLink('http://code.google.com/p/mcdsupport/wiki/Help')
