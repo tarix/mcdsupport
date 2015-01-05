@@ -59,9 +59,8 @@ def addJapaneseMcdModel(col):
     fm = mm.newField("Reading")
     mm.addField(m, fm)
     t = mm.newTemplate("Japanese MCD")
-    fmt = "{{cloze:Text}}%s"
-    t['qfmt'] = fmt % ""
-    t['afmt'] = fmt % "<br>\n{{Reading}}<br>\n{{Notes}}<br>\n{{Source}}"
+    t['qfmt'] = "{{kanji:cloze:Text}}"
+    t['afmt'] = "{{furigana:cloze:Text}}<br><br>\n{{#Reading}}{{furigana:Reading}}<br><br>{{/Reading}}\n{{#Notes}}{{furigana:Notes}}<br><br>{{/Notes}}\n{{Source}}"
     mm.addTemplate(m, t)
     mm.add(m)
     return m
