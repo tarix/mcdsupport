@@ -13,11 +13,13 @@ appname = u'MCD Support v'+version
 modes = [
     'space',
     'semicolon',
-    'kanji'
+    'kanji',
+    'jp_learning'
 ]
 
 modeNames = [
     u'Manual: Space',
     u'Manual: Semicolon',
-    u'Auto: 漢字'
+    u'Auto: 漢字',
+    u'Japanese Learning'
 ]

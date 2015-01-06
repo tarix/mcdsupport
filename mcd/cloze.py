@@ -30,6 +30,12 @@ def listManualSemicolon(clozes):
 def listKanjiHanzi(clozes):
     return list(clozes)
 
+def formatReplacement(cloze, reading):
+    if cloze == reading:
+        return cloze
+    else:
+        return u' %s::%s' % (reading, cloze)
+
 class Cloze():
     def __init__(self):
         # grab reference to anki globals
@@ -58,11 +64,29 @@ class Cloze():
         # Kanji/Hanzi
         elif self.mode == 'kanji':
             listClozes = listKanjiHanzi(self.clozes)
+        # Japanese Learning mode uses manually spaced words
+        if self.mode == 'jp_learning':
+            listClozes = listManualSpace(self.clozes)
         # remove any empty (whitespace only) entries
         listClozes = [ clz for clz in listClozes if clz.strip() ]
         # remove duplicates
         listClozes = removeDups(listClozes)
         return listClozes
+
+    def _generateReplacementList(self, clozes):
+        # learning mode adds the reading
+        if self.mode == 'jp_learning':
+            # generate the readins from mecab
+            try:
+                from japanese.reading import mecab
+                readings = [ mecab.reading(clz) for clz in clozes ]
+            except:
+                self.status = u'Error: Unable to generate the readings. Please install the Japanese Support Plugin.'
+                return None
+            replacements = [ formatReplacement( clozes[i], reading ) for i, reading in enumerate(readings) ]
+        else:
+            replacements = clozes
+        return replacements
 
     def _clozeReplace(self, text, cloze, cloze_text):
         # process the replacement based on user options
@@ -73,13 +97,13 @@ class Cloze():
 
     def _clozePrepare(self, text, cloze, num):
         # replace the text with a cloze sub
-        cloze_stub = u'{{c%d::' % num + u'}}'
+        cloze_stub = u'{{c%d::}}' % num
         return self._clozeReplace( text, cloze, cloze_stub )
 
     def _clozeFinalize(self, text, cloze, num):
         # replace the subs with the final cloze
-        cloze_stub = u'{{c%d::' % num + u'}}'
-        cloze_text = u'{{c%d::' % num + cloze + u'}}'
+        cloze_stub = u'{{c%d::}}' % num
+        cloze_text = u'{{c%d::%s}}' % (num, cloze)
         return unicode.replace( text, cloze_stub, cloze_text )
 
     def createNote(self):
@@ -92,10 +116,13 @@ class Cloze():
             note.model()['did'] = self.mw.col.decks.id(self.deck)
         # verify this is an Anki 2 cloze model
         if not note.model()['type'] == MODEL_CLOZE:
-            self.status = u'Error: '+note.model()['name']+' is not a Cloze model.' 
+            self.status = u'Error: '+note.model()['name']+' is not a Cloze note type.' 
             return False
-        # create a list of cloze candidates
+        # create a list of cloze candidates and their replacements
         listClozes = self._generateClozeList()
+        replacements = self._generateReplacementList(listClozes)
+        if not replacements:
+            return False
         # grab part of the card for the status update
         excerpt = self.text[:10]
         excerpt = excerpt.replace(u'\n', u' ')
@@ -111,7 +138,7 @@ class Cloze():
         for i, clz in enumerate(listClozes):
             self.text = self._clozePrepare( self.text, clz, i+1 )
         # finalize the clozes, this two stage process prevents errors with embedded clozes
-        for i, clz in enumerate(listClozes):
+        for i, clz in enumerate(replacements):
             self.text = self._clozeFinalize( self.text, clz, i+1 )
         # set the tags
         note.tags = self.mw.col.tags.split(self.tags)
