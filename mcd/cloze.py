@@ -132,8 +132,8 @@ class Cloze():
         self.text = unicode.replace( self.text, '\n', '<br>' )
         self.notes = unicode.replace( self.notes, '\n', '<br>' )
         self.source = unicode.replace( self.source, '\n', '<br>' )            
-        # save the text for the reading generation
-        reading = self.text
+        # save the expression for the reading generation
+        expression = self.text
         # pre-process all of the closes
         for i, clz in enumerate(listClozes):
             self.text = self._clozePrepare( self.text, clz, i+1 )
@@ -154,10 +154,14 @@ class Cloze():
         if reading_id:
             try:
                 from japanese.reading import mecab
-                note.fields[ reading_id[0] ] = mecab.reading(reading)
+                note.fields[ reading_id[0] ] = mecab.reading(expression)
             except:
                 self.status = u'Error: Unable to generate the reading. Please install the Japanese Support Plugin.'
                 return False
+        # if we have an expression field, save the original text
+        expression_id = self.mw.col.models.fieldMap( note.model() ).get('Expression', None)
+        if expression_id:
+            note.fields[ expression_id[0] ] = expression
         # fill in the note fields
         note.fields[0] = self.text
         note.fields[1] = self.notes

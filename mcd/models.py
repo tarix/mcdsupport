@@ -56,6 +56,8 @@ def addJapaneseMcdModel(col):
     mm.addField(m, fm)
     fm = mm.newField("Source")
     mm.addField(m, fm)
+    fm = mm.newField("Expression")
+    mm.addField(m, fm)
     fm = mm.newField("Reading")
     mm.addField(m, fm)
     t = mm.newTemplate("Japanese MCD")
