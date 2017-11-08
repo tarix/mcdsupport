@@ -9,14 +9,23 @@ import os, sys, shutil
 isMac = sys.platform.startswith("darwin")
 isWin = sys.platform.startswith("win32")
 
-# ripped from ankiqt/aqt/profiles.py
+# ripped from https://github.com/dae/anki/blob/master/aqt/profiles.py
 def ankiBase():
-	if isWin:
-		return os.path.expanduser("~\\Documents\\Anki")
-	elif isMac:
-		return os.path.expanduser("~/Documents/Anki")
-	else:
-		return os.path.expanduser("~/Anki")
+    if isWin:
+        loc = QStandardPaths.writableLocation(QStandardPaths.AppDataLocation)
+        # the returned value seem to automatically include the app name, but we use Anki2 rather
+        # than Anki
+        assert loc.endswith("/Anki")
+        loc += "2"
+        return loc
+    elif isMac:
+        return os.path.expanduser("~/Library/Application Support/Anki2")
+    else:
+        dataDir = os.environ.get(
+            "XDG_DATA_HOME", os.path.expanduser("~/.local/share"))
+        if not os.path.exists(dataDir):
+            os.makedirs(dataDir)
+        return os.path.join(dataDir, "Anki2")
 
 # main
 
