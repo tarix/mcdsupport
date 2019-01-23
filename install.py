@@ -12,12 +12,7 @@ isWin = sys.platform.startswith("win32")
 # ripped from https://github.com/dae/anki/blob/master/aqt/profiles.py
 def ankiBase():
     if isWin:
-        loc = QStandardPaths.writableLocation(QStandardPaths.AppDataLocation)
-        # the returned value seem to automatically include the app name, but we use Anki2 rather
-        # than Anki
-        assert loc.endswith("/Anki")
-        loc += "2"
-        return loc
+        return os.path.join(os.getenv('APPDATA'), "Anki2")
     elif isMac:
         return os.path.expanduser("~/Library/Application Support/Anki2")
     else:
@@ -31,20 +26,16 @@ def ankiBase():
 
 def main():
     # get the anki addon dir
-    anki_addon_dir = os.path.join(ankiBase(), 'addons')
+    anki_addon_dir = os.path.join(ankiBase(), 'addons21')
     # make our filepaths
-    mcdsupport_py = os.path.join(anki_addon_dir, 'mcdsupport.py')
-    mcd_dir = os.path.join(anki_addon_dir, 'mcd')
+    mcdsupport_dir = os.path.join(anki_addon_dir, 'mcdsupport')
     # show status
-    print 'Installing MCD Support Addon to', anki_addon_dir
+    print 'Installing MCD Support Addon to', mcdsupport_dir
     # do the uninstall
-    if os.path.exists(mcdsupport_py):
-        os.remove(mcdsupport_py)
-    if os.path.exists(mcd_dir):
-        shutil.rmtree(mcd_dir) 
+    if os.path.exists(mcdsupport_dir):
+        shutil.rmtree(mcdsupport_dir) 
     # do the install
-    shutil.copy('mcdsupport.py', anki_addon_dir)
-    shutil.copytree('mcd', mcd_dir)
+    shutil.copytree('addon', mcdsupport_dir)
     return
 
 if __name__ == '__main__':

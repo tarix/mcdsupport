@@ -7,12 +7,8 @@
 #
 # This project is hosted on GitHub: https://github.com/tarix/mcdsupport
 
-#from aqt import mw
-#from anki.hooks import addHook
-
 def init():
-    import mcd.models
-    import mcd.menus
+    from . import models
+    #import mcd.menus
 
-#mw.addonManager.registerAddon("MCD Support", 20000);
-init()  #addHook('init', init)
+init()
