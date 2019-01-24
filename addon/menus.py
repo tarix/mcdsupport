@@ -7,20 +7,17 @@
 #
 # This project is hosted on GitHub: https://github.com/tarix/mcdsupport
 
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import Qt, SIGNAL
-from PyQt4.QtGui import QAction
-
 from aqt import mw
+from aqt.qt import *
 from aqt.utils import tooltip
 
-import mcd.addmcds
+from .addmcds import *
 
 dlgAddMcds = None
 
 def menuAddMcds():
     # TODO: handle existing instance
-    dlgAddMcds = mcd.addmcds.AddMcds(mw)
+    dlgAddMcds = AddMcds(mw)
 
 def menuRandomizeDeck():
     # randomize the currently selected deck
@@ -38,20 +35,20 @@ def menuRandomizeDeck():
 def init():
     mw.form.menuTools.addSeparator()
     # add the menu option for the main dialog
-    mw.form.actionAddMcd = QtGui.QAction('Add MCD Cards', mw)
+    mw.form.actionAddMcd = QAction('Add MCD Cards', mw)
     mw.form.actionAddMcd.setStatusTip('Add MCD Cards')
     mw.form.actionAddMcd.setEnabled(True)
     mw.form.actionAddMcd.setShortcut('Ctrl+M')
-    mw.form.actionAddMcd.setIcon(QtGui.QIcon(':/icons/list-add.png'))
-    mw.connect(mw.form.actionAddMcd, QtCore.SIGNAL('triggered()'), menuAddMcds)
+    mw.form.actionAddMcd.setIcon(QIcon(':/icons/list-add.png'))
+    mw.form.actionAddMcd.triggered.connect(menuAddMcds)
     mw.form.menuTools.addAction(mw.form.actionAddMcd)
     # add the menu option to randomize the deck
-    mw.form.actionAddMcd = QtGui.QAction('Randomize Deck', mw)
+    mw.form.actionAddMcd = QAction('Randomize Deck', mw)
     mw.form.actionAddMcd.setStatusTip('Randomize Deck')
     mw.form.actionAddMcd.setEnabled(True)
     mw.form.actionAddMcd.setShortcut('Ctrl+R')
-    mw.form.actionAddMcd.setIcon(QtGui.QIcon(':/icons/package_games_card.png'))
-    mw.connect(mw.form.actionAddMcd, QtCore.SIGNAL('triggered()'), menuRandomizeDeck)
+    mw.form.actionAddMcd.setIcon(QIcon(':/icons/package_games_card.png'))
+    mw.form.actionAddMcd.triggered.connect(menuRandomizeDeck)
     mw.form.menuTools.addAction(mw.form.actionAddMcd)
 
 init()

@@ -7,8 +7,8 @@
 #
 # This project is hosted on GitHub: https://github.com/tarix/mcdsupport
 
-version = u'2.0-5'
-appname = u'MCD Support v'+version
+version = '2.1-1'
+appname = 'MCD Support v'+version
 
 modes = [
     'space',
@@ -18,8 +18,8 @@ modes = [
 ]
 
 modeNames = [
-    u'Manual: Space',
-    u'Manual: Semicolon',
-    u'Auto: 漢字',
-    u'Japanese Learning'
+    'Manual: Space',
+    'Manual: Semicolon',
+    'Auto: 漢字',
+    'Japanese Learning'
 ]

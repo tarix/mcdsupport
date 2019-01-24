@@ -7,18 +7,16 @@
 #
 # This project is hosted on GitHub: https://github.com/tarix/mcdsupport
 
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import Qt, SIGNAL
-from PyQt4.QtGui import QDialog, QCursor
-
 from aqt import mw
 from aqt.utils import showInfo, saveGeom, restoreGeom, askUser, openLink
+from aqt.qt import *
+
 import aqt.modelchooser
 import aqt.tagedit
 
-import mcd
-from cloze import Cloze
-import dlgAddMcds
+from . import _globals
+from .cloze import Cloze
+from . import dlgAddMcds
 
 def removeTabsAndNewlines(str):
     str = str.replace('\t', '')
@@ -31,7 +29,7 @@ class AddMcds(QDialog):
     def __init__(self, mw):
         QDialog.__init__(self, mw, Qt.Window)
         self.mw = mw
-        self.setWindowIcon(QtGui.QIcon(':/icons/list-add.png'))
+        self.setWindowIcon(QIcon(':/icons/list-add.png'))
         self.form = dlgAddMcds.Ui_Dialog()
         self.form.setupUi(self)
         self.setupCombos()
@@ -40,26 +38,26 @@ class AddMcds(QDialog):
         self.updateTagsAndDeck()
         self.restoreState()
         self.mw.requireReset(modal=True)
-        self.setWindowTitle( self.windowTitle()+' ('+mcd.appname+')' )
+        self.setWindowTitle( self.windowTitle()+' ('+_globals.appname+')' )
         self.show()
 
     def setupCombos(self):
-		# add MCD modes
-        self.form.cmbMode.addItems(mcd.modeNames)
-		# add the Model Chooser
+        # add MCD modes
+        self.form.cmbMode.addItems(_globals.modeNames)
+        # add the Model Chooser
         self.modelChooser = aqt.modelchooser.ModelChooser(self.mw, self.form.modelArea)
         
     def setupButtons(self):
         # set the configure icon
-        self.form.pbtConfigure.setIcon(QtGui.QIcon(':/icons/configure.png'))
+        self.form.pbtConfigure.setIcon(QIcon(':/icons/configure.png'))
         self.form.pbtConfigure.hide()
         # connect the button signals to their functions
-        QtCore.QObject.connect(self.form.pbtTextToNotes, QtCore.SIGNAL('clicked()'), self.copyTextToNotes)
-        QtCore.QObject.connect(self.form.pbtTextToClozes, QtCore.SIGNAL('clicked()'), self.copyTextToClozes)
-        QtCore.QObject.connect(self.form.pbtNotesToText, QtCore.SIGNAL('clicked()'), self.copyNotesToText)
-        QtCore.QObject.connect(self.form.pbtConfigure, QtCore.SIGNAL('clicked()'), self.configure)
-        QtCore.QObject.connect(self.form.pbtAdd, QtCore.SIGNAL('clicked()'), self.addMcd)
-        QtCore.QObject.connect(self.form.buttonBox, QtCore.SIGNAL('helpRequested()'), self.helpRequested)
+        self.form.pbtTextToNotes.clicked.connect(self.copyTextToNotes)
+        self.form.pbtTextToClozes.clicked.connect(self.copyTextToClozes)
+        self.form.pbtNotesToText.clicked.connect(self.copyNotesToText)
+        self.form.pbtConfigure.clicked.connect(self.configure)
+        self.form.pbtAdd.clicked.connect(self.addMcd)
+        self.form.buttonBox.button(QDialogButtonBox.Help).clicked.connect(self.helpRequested)
 
     # Tag & deck handling
     ######################################################################
@@ -71,10 +69,10 @@ class AddMcds(QDialog):
         self.form.lneTags.hide()
         self.form.layTags.removeWidget(self.form.lneTags)
         # create our size policy
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Fixed)
+        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-		# set the deck
+        # set the deck
         self.deck = aqt.tagedit.TagEdit(self, type=1)
         self.deck.setSizePolicy(sizePolicy)
         self.form.layTags.insertWidget(1, self.deck) # put it just past the label
@@ -130,12 +128,12 @@ class AddMcds(QDialog):
     def addMcd(self):
         # begin busy cursor
         self.mw.app.setOverrideCursor(QCursor(Qt.WaitCursor))
-        self.form.lblStatus.setText(u'')
+        self.form.lblStatus.setText('')
         self.form.pbtAdd.setEnabled(False)
         self.mw.app.processEvents()
         # get all user input
         cloze = Cloze();
-        cloze.mode = mcd.modes[ self.form.cmbMode.currentIndex() ]
+        cloze.mode = _globals.modes[ self.form.cmbMode.currentIndex() ]
         cloze.text = self.form.pteText.toPlainText()
         cloze.notes = self.form.pteNotes.toPlainText()
         cloze.source = self.form.lneSource.text()
@@ -143,7 +141,7 @@ class AddMcds(QDialog):
         cloze.whole_words_only = self.form.tbtWholeWords.isChecked()
         cloze.deck = self.deck.text()
         cloze.tags = self.tags.text()
-		# create the note
+        # create the note
         okay = cloze.createNote()
         # update the results
         self.form.lblStatus.setText(cloze.status)
@@ -152,12 +150,12 @@ class AddMcds(QDialog):
             self.form.pteText.clear()
             self.form.pteNotes.clear()
             self.form.lneClozes.clear()
-		# end busy cursor
+        # end busy cursor
         self.form.pbtAdd.setEnabled(True)
         self.mw.app.restoreOverrideCursor()
         
     def helpRequested(self):
-        openLink('http://code.google.com/p/mcdsupport/wiki/Help')
+        openLink('https://github.com/tarix/mcdsupport')
 
     # Dialog Close
     ######################################################################

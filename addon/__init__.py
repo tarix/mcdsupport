@@ -7,8 +7,4 @@
 #
 # This project is hosted on GitHub: https://github.com/tarix/mcdsupport
 
-def init():
-    from . import models
-    #import mcd.menus
-
-init()
+from . import models, menus
