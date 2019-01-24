@@ -7,14 +7,12 @@
 #
 # This project is hosted on GitHub: https://github.com/tarix/mcdsupport
 
-import re
+import importlib, re
 
 from anki import utils
 from anki.consts import *
 
 from aqt import mw
-
-from .japanese_reading import mecab
 
 # http://www.peterbe.com/plog/uniqifiers-benchmark
 def removeDups(seq): # Dave Kirby (f8)
@@ -55,6 +53,20 @@ class Cloze():
         self.tags = ''
         # status
         self.status = ''
+        # mecab controller
+        self.mecab = None
+
+    def _mecab(self):
+        if self.mecab == None:
+            # import the japanese plugin mecab module
+            reading = importlib.import_module('3918629684.reading')
+            try:
+                # create our controller and initialize it
+                self.mecab = reading.MecabController()
+                self.mecab.setup()
+            except:
+                self.mecab = None
+        return self.mecab
 
     def _generateClozeList(self):
         # Manual (space delimeter)
@@ -80,7 +92,7 @@ class Cloze():
         if self.mode == 'jp_learning':
             # generate the readings from mecab
             try:
-                readings = [ mecab.reading(clz) for clz in clozes ]
+                readings = [ self._mecab().reading(clz) for clz in clozes ]
             except:
                 self.status = 'Error: Unable to generate cloze readings. Please install the Japanese Support Plugin.'
                 return None
@@ -154,7 +166,7 @@ class Cloze():
         reading_id = self.mw.col.models.fieldMap( note.model() ).get('Reading', None)
         if reading_id:
             try:
-                note.fields[ reading_id[0] ] = mecab.reading(expression)
+                note.fields[ reading_id[0] ] = self._mecab().reading(expression)
             except:
                 self.status = 'Error: Unable to generate the reading. Please install the Japanese Support Plugin.'
                 return False
