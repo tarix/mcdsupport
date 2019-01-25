@@ -32,6 +32,49 @@ def menuRandomizeDeck():
         tip = deck['name']+' is not a random deck.'
     tooltip( tip, period=5000 )
 
+# ----------------------------------------------------------------------------
+#
+# This was a simple hack to fill out the Expression field for older MCD cards
+# in order to provide compatibility with MorphMan. I saved it in case its
+# useful for other upgrade functions in the future.
+#
+# import re
+#
+# clozeReg = r"\{\{c[0-9]*?::(.*?)(::(.*?))?\}\}"
+#
+# def stripCloze( s ):
+#     def repl(m):
+#         if m.group(3):
+#             return m.group(3)
+#         return m.group(1)
+#     s = re.sub(clozeReg, repl, s)
+#     return s
+#
+# def menuFixExpression():
+#     mid = mw.col.models.byName('Japanese MCD')
+#     text_id = mw.col.models.fieldMap(mid).get('Text', None)[0] 
+#     expression_id = mw.col.models.fieldMap(mid).get('Expression', None)[0] 
+#     ids = mw.col.findNotes('"note:Japanese MCD"')
+#     for id in ids:
+#         note = mw.col.getNote(id)
+#         expression = note.fields[expression_id]
+#         if expression == '':
+#             text = note.fields[text_id]
+#             note.fields[expression_id] = stripCloze(text)
+#             note.flush()
+#     mw.col.save()
+#     mw.reset()
+#
+# def initFixExpression():
+#     # add the menu option to randomize the deck
+#     mw.form.actionAddMcd = QAction('Fix Expression', mw)
+#     mw.form.actionAddMcd.setStatusTip('Fix Expression')
+#     mw.form.actionAddMcd.setEnabled(True)
+#     mw.form.actionAddMcd.triggered.connect(menuFixExpression)
+#     mw.form.menuTools.addAction(mw.form.actionAddMcd)
+#
+# -----------------------------------------------------------------------------
+
 def init():
     mw.form.menuTools.addSeparator()
     # add the menu option for the main dialog
