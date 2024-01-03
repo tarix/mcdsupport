@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 #
 # ui build script
 
@@ -10,14 +10,14 @@ forms = [
 ]
 
 pyuic = { 
-    'posix': 'pyuic5',
-    'nt': 'pyuic5.bat'
+    'posix': 'pyuic6',
+    'nt': 'pyuic6.bat'
 }
 
 def main():
     exe = pyuic[ os.name ]
     for form in forms:
-        print 'Building '+form+' ...'
+        print('Building '+form+' ...')
         iform_path = os.path.join('ui',    form+'.ui')
         oform_path = os.path.join('addon', form+'.py')
         cmd = exe+' '+iform_path+' 1> '+oform_path

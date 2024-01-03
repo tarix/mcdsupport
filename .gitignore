@@ -1,2 +1,5 @@
-dlg*.py
+# python junk
 *.pyc
+
+# macos junk
+.DS_Store

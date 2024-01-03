@@ -1,8 +1,8 @@
 Requirements:
 
-    * Python 3.6 or later
-    * PyQt5
-    * Homebrew users can install python and pyqt5
+    * Python 3.9 or later
+    * PyQt6
+    * Homebrew users can install python3 and pyqt
 
 Building the UI:
 

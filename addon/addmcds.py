@@ -27,7 +27,8 @@ def removeTabsAndNewlines(str):
 class AddMcds(QDialog):
 
     def __init__(self, mw):
-        QDialog.__init__(self, mw, Qt.Window)
+        super(AddMcds, self).__init__(mw)
+        #QDialog.__init__(self, parent=mw, Qt.Window)
         self.mw = mw
         self.setWindowIcon(QIcon(':/icons/list-add.png'))
         self.form = dlgAddMcds.Ui_Dialog()
@@ -57,7 +58,7 @@ class AddMcds(QDialog):
         self.form.pbtNotesToText.clicked.connect(self.copyNotesToText)
         self.form.pbtConfigure.clicked.connect(self.configure)
         self.form.pbtAdd.clicked.connect(self.addMcd)
-        self.form.buttonBox.button(QDialogButtonBox.Help).clicked.connect(self.helpRequested)
+        self.form.buttonBox.helpRequested.connect(self.helpRequested)
 
     # Tag & deck handling
     ######################################################################
@@ -68,17 +69,11 @@ class AddMcds(QDialog):
         self.form.layTags.removeWidget(self.form.lneDeck)
         self.form.lneTags.hide()
         self.form.layTags.removeWidget(self.form.lneTags)
-        # create our size policy
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
         # set the deck
         self.deck = aqt.tagedit.TagEdit(self, type=1)
-        self.deck.setSizePolicy(sizePolicy)
         self.form.layTags.insertWidget(1, self.deck) # put it just past the label
         # set the tags
         self.tags = aqt.tagedit.TagEdit(self)
-        self.tags.setSizePolicy(sizePolicy)
         self.form.layTags.insertWidget(3, self.tags) # put it just past the label
 
     def updateTagsAndDeck(self):

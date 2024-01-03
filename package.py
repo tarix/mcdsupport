@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # package the project
 
 import os, shutil, subprocess
@@ -34,7 +34,7 @@ def main():
     copyFiles(pkg_dir)
     # zip everything up
     cmd = 'cd '+pkg_dir+' ; zip -9r ../'+pkg_dir+'.zip .'
-    print cmd
+    print(cmd)
     subprocess.call( cmd, shell=True )
     # clean up
     shutil.rmtree( pkg_dir )

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 #
 # install plugin to anki addons folder
 
@@ -30,7 +30,7 @@ def main():
     # make our filepaths
     mcdsupport_dir = os.path.join(anki_addon_dir, 'mcdsupport')
     # show status
-    print 'Installing MCD Support Addon to', mcdsupport_dir
+    print('Installing MCD Support Addon to', mcdsupport_dir)
     # do the uninstall
     if os.path.exists(mcdsupport_dir):
         shutil.rmtree(mcdsupport_dir) 
